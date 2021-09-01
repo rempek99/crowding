@@ -1,7 +1,6 @@
-package pl.remplewicz.crowding.rest;
+package crowding.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import pl.remplewicz.crowding.dto.UserAccountDto;
 import pl.remplewicz.crowding.exception.UserAccountException;
 import pl.remplewicz.crowding.service.IUserAccountService;

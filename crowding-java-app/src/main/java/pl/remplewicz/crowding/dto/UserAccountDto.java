@@ -1,4 +1,4 @@
-package pl.remplewicz.crowding.dto;
+package crowding.dto;
 
 import lombok.Builder;
 import lombok.Data;

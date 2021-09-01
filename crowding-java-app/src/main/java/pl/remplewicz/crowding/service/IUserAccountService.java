@@ -1,6 +1,5 @@
-package pl.remplewicz.crowding.service;
+package crowding.service;
 
-import org.springframework.stereotype.Service;
 import pl.remplewicz.crowding.exception.UserAccountException;
 import pl.remplewicz.crowding.model.UserAccount;
 
