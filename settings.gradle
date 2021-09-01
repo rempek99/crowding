@@ -1,1 +1,4 @@
 rootProject.name = 'crowding'
+include 'crowding-java-app'
+include 'crowding-npm-app'
+

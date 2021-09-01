@@ -1,4 +1,4 @@
-package crowding.util.converter;
+package pl.remplewicz.crowding.util.converter;
 
 import pl.remplewicz.crowding.dto.UserAccountDto;
 import pl.remplewicz.crowding.model.UserAccount;

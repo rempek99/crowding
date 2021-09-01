@@ -1,4 +1,4 @@
-package crowding.rest;
+package pl.remplewicz.crowding.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.remplewicz.crowding.dto.UserAccountDto;

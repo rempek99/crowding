@@ -1,4 +1,4 @@
-package crowding.security;
+package pl.remplewicz.crowding.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

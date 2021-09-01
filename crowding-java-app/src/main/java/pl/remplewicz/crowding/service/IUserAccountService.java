@@ -1,4 +1,4 @@
-package crowding.service;
+package pl.remplewicz.crowding.service;
 
 import pl.remplewicz.crowding.exception.UserAccountException;
 import pl.remplewicz.crowding.model.UserAccount;
