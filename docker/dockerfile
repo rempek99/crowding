@@ -1,7 +1,0 @@
-FROM postgres
-ENV POSTGRES_PASSWORD secret
-ENV POSTGRES_DB crowding
-/bin/sh -c su postgres &&
-# TODO finish it and add following commands to build database!!!!
-# docker build -t crowdind-docker
-# docker run -d --name crowding-postres -p 5432:5432 crowding-docker

@@ -1,9 +1,0 @@
-defaultTasks 'build'
-
-group = 'pl.remplewicz'
-version = '0.0.1-SNAPSHOT'
-
-wrapper {
-	description "The wrapper"
-	gradleVersion = '5.0'
-}
