@@ -4,7 +4,7 @@ package pl.remplewicz.crowding.util.converter;
 import java.util.List;
 
 import pl.remplewicz.crowding.dto.UserAccountDto;
-import pl.remplewicz.crowding.model.UserAccount;
+import pl.remplewicz.crowding.model.User;
 import java.util.stream.Collectors;
 
 public class UserAccountConverter {
@@ -13,25 +13,25 @@ public class UserAccountConverter {
 
     }
 
-    public static UserAccountDto entityToDto(UserAccount userAccount) {
+    public static UserAccountDto entityToDto(User user) {
         return UserAccountDto
                 .builder()
-                .id(userAccount.getId())
-                .password(userAccount.getPassword())
-                .username(userAccount.getUsername())
-                .active(userAccount.isActive())
+                .id(user.getId())
+                .password(user.getPassword())
+                .username(user.getUsername())
+                .active(user.isEnabled())
                 .build();
     }
 
-    public static List<UserAccountDto> entityListToDtoList(List<UserAccount> userAccountList) {
-        return userAccountList
+    public static List<UserAccountDto> entityListToDtoList(List<User> userList) {
+        return userList
                 .stream()
                 .map(UserAccountConverter::entityToDto)
                 .collect(Collectors.toList());
     }
 
-    public static UserAccount createEntityFromDto(UserAccountDto userAccount) {
-        return new UserAccount(
+    public static User createEntityFromDto(UserAccountDto userAccount) {
+        return new User(
                 userAccount.getId(),
                 userAccount.getUsername(),
                 userAccount.getPassword(),

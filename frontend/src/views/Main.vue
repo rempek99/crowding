@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <img alt="Vue logo" src="../assets/logo.png" />
-    <h1>Welcome {{ title }}!</h1>
+    <h1>Welcome!</h1>
     <div class="container">
       <p>
         Id: <span>{{ greeting.id }}</span>
@@ -26,7 +26,7 @@ export default {
   mounted() {
     axios
       .get("http://localhost:8081/resource")
-      .then((response) => (this.greeting = response));
+      .then((response) => (this.greeting = response.data));
   },
 };
 </script>

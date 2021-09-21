@@ -10,27 +10,28 @@ import java.util.Objects;
 @Setter
 @ToString
 @Entity
+@Table(name = "USERS")
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserAccount {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(unique = true, length = 64)
+    @Column(unique = true, length = 128)
     private String username;
 
-    @Column(length = 64)
+    @Column(length = 128)
     private String password;
 
-    private boolean active = false;
+    private boolean enabled = false;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        UserAccount that = (UserAccount) o;
+        User that = (User) o;
 
         return Objects.equals(id, that.id);
     }

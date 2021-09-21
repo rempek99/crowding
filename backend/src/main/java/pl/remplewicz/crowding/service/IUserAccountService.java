@@ -1,20 +1,20 @@
 package pl.remplewicz.crowding.service;
 
 import pl.remplewicz.crowding.exception.UserAccountException;
-import pl.remplewicz.crowding.model.UserAccount;
+import pl.remplewicz.crowding.model.User;
 
 import java.util.List;
 
 public interface IUserAccountService {
 
-    List<UserAccount> getAll();
+    List<User> getAll();
 
-    UserAccount get(Long id) throws UserAccountException.UserNotFoundAccountException;
+    User get(Long id) throws UserAccountException.UserNotFoundAccountException;
 
-    UserAccount registerUser(UserAccount userAccount);
+    User registerUser(User user);
 
-    UserAccount deactivateUser(Long userId) throws UserAccountException.UserNotFoundAccountException;
+    User deactivateUser(Long userId) throws UserAccountException.UserNotFoundAccountException;
 
-    UserAccount activateUser(Long userId) throws UserAccountException.UserNotFoundAccountException;
+    User activateUser(Long userId) throws UserAccountException.UserNotFoundAccountException;
 
 }
