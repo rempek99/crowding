@@ -13,4 +13,8 @@ public class UserConverter {
                 .password(entity.getPassword())
                 .build();
     }
+
+    public static User createEntityFromDto(UserDto userDto) {
+        return new User(userDto.getUsername(), userDto.getPassword());
+    }
 }

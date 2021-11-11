@@ -1,4 +1,4 @@
-package pl.remplewicz.crowding.rest;
+package pl.remplewicz.crowding.rest.account;
 
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpHeaders;

@@ -10,7 +10,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "user_authorities")
@@ -18,6 +17,12 @@ public class Role implements GrantedAuthority {
 
     public static final String ADMIN = "ADMIN";
     public static final String USER = "USER";
+
+    public Role(User user, String authority, boolean enabled) {
+        this.user = user;
+        this.authority = authority;
+        this.enabled = enabled;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +34,8 @@ public class Role implements GrantedAuthority {
 
     @Column(columnDefinition = "varchar(128)")
     private String authority;
+
+    private boolean enabled = false;
 
     @Override
     public boolean equals(Object o) {
