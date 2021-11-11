@@ -21,7 +21,8 @@ public class UserService {
 
     public User test(String login){
         User tester = new User(login, passwordEncoder.encode("1234"));
-        tester.addAuthority(new Role(Role.ADMIN));
+        userRepo.saveAndFlush(tester);
+        tester.addAuthority(new Role(1L,tester,Role.ADMIN));
         return userRepo.save(tester);
     }
 }

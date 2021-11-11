@@ -26,7 +26,7 @@ public class User implements UserDetails, Serializable {
     private String password;
     private String fullName;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private final Set<Role> authorities = new HashSet<>();
 
     public User() {
@@ -52,7 +52,7 @@ public class User implements UserDetails, Serializable {
         return enabled;
     }
 
-    public void addAuthority(Role role){
+    public void addAuthority(Role role) {
         authorities.add(role);
     }
 }
