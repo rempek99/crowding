@@ -25,8 +25,13 @@ export default {
   },
   mounted() {
     axios
-      .get("http://localhost:8081/resource")
-      .then((response) => (this.greeting = response.data));
+      .get("http://localhost:8080/resource")
+      .then((response) => (this.greeting = response.data))
+      .catch((error) => {
+        if (!error.status) {
+          this.greeting.content = "Connection Refused";
+        }
+      });
   },
 };
 </script>

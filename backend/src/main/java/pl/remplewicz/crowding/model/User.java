@@ -1,43 +1,58 @@
 package pl.remplewicz.crowding.model;
 
-import lombok.*;
-import org.hibernate.Hibernate;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.CollectionType;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
-@Getter
-@Setter
-@ToString
 @Entity
-@Table(name = "USERS")
-@NoArgsConstructor
-@AllArgsConstructor
-public class User {
+@Data
+@Table(name = "users")
+public class User implements UserDetails, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column(unique = true, length = 128)
+    private boolean enabled = true;
+
     private String username;
-
-    @Column(length = 128)
     private String password;
+    private String fullName;
 
-    private boolean enabled = false;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private final Set<Role> authorities = new HashSet<>();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        User that = (User) o;
+    public User() {
+    }
 
-        return Objects.equals(id, that.id);
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
     @Override
-    public int hashCode() {
-        return 76039858;
+    public boolean isAccountNonExpired() {
+        return enabled;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return enabled;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return enabled;
+    }
+
+    public void addAuthority(Role role){
+        authorities.add(role);
     }
 }
