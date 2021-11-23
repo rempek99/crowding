@@ -7,6 +7,16 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 import java.util.Objects;
 
+/*
+ * Copyright (c) 2021.
+ * All Rights Reserved.
+ * Created by:
+ * Name: Arkadiusz Remplewicz
+ * Index Number: 224413
+ * E-mail: arkadiusz.remplewicz@gmail.com
+ * Git-Hub Username: rempek99
+ */
+
 @Getter
 @Setter
 @ToString
@@ -15,15 +25,12 @@ import java.util.Objects;
 @Table(name = "user_authorities")
 public class Role implements GrantedAuthority {
 
+    // Statics
     public static final String ADMIN = "ADMIN";
     public static final String USER = "USER";
 
-    public Role(User user, String authority, boolean enabled) {
-        this.user = user;
-        this.authority = authority;
-        this.enabled = enabled;
-    }
 
+    // Fields
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -36,6 +43,14 @@ public class Role implements GrantedAuthority {
     private String authority;
 
     private boolean enabled = false;
+
+
+    //  Methods
+    public Role(User user, String authority, boolean enabled) {
+        this.user = user;
+        this.authority = authority;
+        this.enabled = enabled;
+    }
 
     @Override
     public boolean equals(Object o) {

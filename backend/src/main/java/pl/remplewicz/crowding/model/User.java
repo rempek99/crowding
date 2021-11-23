@@ -10,6 +10,16 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/*
+ * Copyright (c) 2021.
+ * All Rights Reserved.
+ * Created by:
+ * Name: Arkadiusz Remplewicz
+ * Index Number: 224413
+ * E-mail: arkadiusz.remplewicz@gmail.com
+ * Git-Hub Username: rempek99
+ */
+
 @Entity
 @Getter
 @Setter
@@ -18,6 +28,7 @@ import java.util.Set;
 @Table(name = "users")
 public class User implements UserDetails, Serializable {
 
+    // Fields
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,20 +37,27 @@ public class User implements UserDetails, Serializable {
 
     @Column(unique = true)
     private String username;
+
     private String password;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private final Set<Role> authorities = new HashSet<>();
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    private UserInfo userInfo;
 
+
+    // Methods
     public User(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private final Set<Role> authorities = new HashSet<>();
+
     @Override
     public boolean isAccountNonExpired() {
         return enabled;
     }
+
 
     @Override
     public boolean isAccountNonLocked() {
@@ -53,6 +71,10 @@ public class User implements UserDetails, Serializable {
 
     public void addAuthority(Role role) {
         authorities.add(role);
+    }
+
+    public boolean hasRole(String roleName) {
+        return authorities.stream().filter(role -> role.getAuthority().equals(roleName)).anyMatch(Role::isEnabled);
     }
 
     @Override

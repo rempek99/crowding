@@ -1,4 +1,4 @@
-package pl.remplewicz.crowding.rest.account;
+package pl.remplewicz.crowding.rest.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +11,16 @@ import pl.remplewicz.crowding.service.UserService;
 import pl.remplewicz.crowding.util.converter.UserConverter;
 
 import javax.validation.Valid;
+
+/*
+ * Copyright (c) 2021.
+ * All Rights Reserved.
+ * Created by:
+ * Name: Arkadiusz Remplewicz
+ * Index Number: 224413
+ * E-mail: arkadiusz.remplewicz@gmail.com
+ * Git-Hub Username: rempek99
+ */
 
 @RestController
 @RequestMapping("api/public")

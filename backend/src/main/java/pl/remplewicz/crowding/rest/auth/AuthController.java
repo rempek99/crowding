@@ -1,4 +1,4 @@
-package pl.remplewicz.crowding.rest.account;
+package pl.remplewicz.crowding.rest.auth;
 
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +18,16 @@ import pl.remplewicz.crowding.dto.UserDto;
 import pl.remplewicz.crowding.model.User;
 import pl.remplewicz.crowding.util.LoginCredentials;
 import pl.remplewicz.crowding.util.converter.UserConverter;
+
+/*
+ * Copyright (c) 2021.
+ * All Rights Reserved.
+ * Created by:
+ * Name: Arkadiusz Remplewicz
+ * Index Number: 224413
+ * E-mail: arkadiusz.remplewicz@gmail.com
+ * Git-Hub Username: rempek99
+ */
 
 @Api(tags = "Authentication")
 @RestController

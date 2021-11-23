@@ -11,6 +11,16 @@ import pl.remplewicz.crowding.model.User;
 import java.util.List;
 import java.util.Optional;
 
+/*
+ * Copyright (c) 2021.
+ * All Rights Reserved.
+ * Created by:
+ * Name: Arkadiusz Remplewicz
+ * Index Number: 224413
+ * E-mail: arkadiusz.remplewicz@gmail.com
+ * Git-Hub Username: rempek99
+ */
+
 @Repository
 @CacheConfig(cacheNames = "users")
 public interface UserRepo extends JpaRepository<User,Long> {
@@ -20,18 +30,6 @@ public interface UserRepo extends JpaRepository<User,Long> {
 
     @Cacheable
     Optional<User> findByUsername(String username);
-
-    @Cacheable
-    default User getById(Long id) {
-        Optional<User> optionalUser = findById(id);
-        if (optionalUser.isEmpty()) {
-            throw new NotFoundException(User.class, id);
-        }
-        if (!optionalUser.get().isEnabled()) {
-            throw new NotFoundException(User.class, id);
-        }
-        return optionalUser.get();
-    }
 
     @CacheEvict(allEntries = true)
     <S extends User> List<S> saveAll(Iterable<S> entities);

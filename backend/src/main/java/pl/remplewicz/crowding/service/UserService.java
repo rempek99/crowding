@@ -5,9 +5,20 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.remplewicz.crowding.exception.DuplicationException;
+import pl.remplewicz.crowding.exception.NotFoundException;
 import pl.remplewicz.crowding.model.Role;
 import pl.remplewicz.crowding.model.User;
 import pl.remplewicz.crowding.repository.UserRepo;
+
+/*
+ * Copyright (c) 2021.
+ * All Rights Reserved.
+ * Created by:
+ * Name: Arkadiusz Remplewicz
+ * Index Number: 224413
+ * E-mail: arkadiusz.remplewicz@gmail.com
+ * Git-Hub Username: rempek99
+ */
 
 @Service
 public class UserService {
@@ -18,6 +29,14 @@ public class UserService {
     public UserService(UserRepo userRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public User findById(Long id) {
+        return userRepo.findById(id).orElseThrow(() -> NotFoundException.createIdNotFound(id));
+    }
+
+    public User findByUsername(String username) {
+        return userRepo.findByUsername(username).orElseThrow(() -> NotFoundException.createUsernameNotFound(username));
     }
 
     public User register(User user) throws DuplicationException {

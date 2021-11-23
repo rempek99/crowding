@@ -12,6 +12,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/*
+ * Copyright (c) 2021.
+ * All Rights Reserved.
+ * Created by:
+ * Name: Arkadiusz Remplewicz
+ * Index Number: 224413
+ * E-mail: arkadiusz.remplewicz@gmail.com
+ * Git-Hub Username: rempek99
+ */
+
 @RestController
 @RequestMapping("api")
 public class MyController {
@@ -23,12 +33,12 @@ public class MyController {
         model.put("content", "Hello World");
         return model;
     }
-    @GetMapping("user")
+    @GetMapping("userGreet")
     public String helloUser() {
         return "Hello User!";
     }
 
-    @GetMapping("admin")
+    @GetMapping("adminGreet")
     @RolesAllowed(Role.ADMIN)
     public String helloAdmin() {
         return "Hello Admin!";

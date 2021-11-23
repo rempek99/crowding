@@ -21,6 +21,16 @@ import java.util.stream.Collectors;
 
 import static org.hibernate.internal.util.StringHelper.isEmpty;
 
+/*
+ * Copyright (c) 2021.
+ * All Rights Reserved.
+ * Created by:
+ * Name: Arkadiusz Remplewicz
+ * Index Number: 224413
+ * E-mail: arkadiusz.remplewicz@gmail.com
+ * Git-Hub Username: rempek99
+ */
+
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
 

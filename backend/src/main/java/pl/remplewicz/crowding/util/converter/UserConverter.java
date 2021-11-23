@@ -3,6 +3,16 @@ package pl.remplewicz.crowding.util.converter;
 import pl.remplewicz.crowding.dto.UserDto;
 import pl.remplewicz.crowding.model.User;
 
+/*
+ * Copyright (c) 2021.
+ * All Rights Reserved.
+ * Created by:
+ * Name: Arkadiusz Remplewicz
+ * Index Number: 224413
+ * E-mail: arkadiusz.remplewicz@gmail.com
+ * Git-Hub Username: rempek99
+ */
+
 public class UserConverter {
 
     private UserConverter(){}
