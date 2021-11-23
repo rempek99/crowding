@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /*
  * Copyright (c) 2021.
@@ -69,8 +70,22 @@ public class User implements UserDetails, Serializable {
         return enabled;
     }
 
-    public void addAuthority(Role role) {
-        authorities.add(role);
+    public void addAuthority(String roleName) {
+        addAuthority(roleName, true);
+    }
+
+    public void addAuthority(String roleName, boolean activated) {
+        Predicate<Role> rolePredicate = role -> role.getAuthority().equals(roleName);
+        if (authorities.stream().anyMatch(rolePredicate)) {
+            authorities.stream().filter(rolePredicate).forEach(role -> role.setEnabled(activated));
+        } else {
+            authorities.add(new Role(this, roleName, activated));
+        }
+    }
+
+    public void removeAuthority(String roleName) {
+        Predicate<Role> rolePredicate = role -> role.getAuthority().equals(roleName);
+        authorities.stream().filter(rolePredicate).forEach(role -> role.setEnabled(false));
     }
 
     public boolean hasRole(String roleName) {

@@ -4,11 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.remplewicz.crowding.dto.UserRolesDto;
 import pl.remplewicz.crowding.exception.DuplicationException;
 import pl.remplewicz.crowding.exception.NotFoundException;
 import pl.remplewicz.crowding.model.Role;
 import pl.remplewicz.crowding.model.User;
 import pl.remplewicz.crowding.repository.UserRepo;
+
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /*
  * Copyright (c) 2021.
@@ -50,8 +55,8 @@ public class UserService {
             }
             throw ex;
         }
-        user.addAuthority(new Role(user, Role.ADMIN, false));
-        user.addAuthority(new Role(user, Role.USER, true));
+        user.addAuthority(Role.ADMIN,false);
+        user.addAuthority(Role.USER);
         return userRepo.save(user);
     }
 
@@ -62,7 +67,19 @@ public class UserService {
     public User test(String login) {
         User tester = new User(login, passwordEncoder.encode("1234"));
         userRepo.saveAndFlush(tester);
-        tester.addAuthority(new Role(tester, Role.ADMIN, true));
+        tester.addAuthority(Role.ADMIN);
         return userRepo.save(tester);
+    }
+
+    public Set<Role> activateUserRole(Long id, String roleName) {
+        User user = findById(id);
+        user.addAuthority(roleName);
+        return userRepo.save(user).getAuthorities().stream().filter(Role::isEnabled).collect(Collectors.toSet());
+    }
+
+    public Set<Role> deactivateUserRole(Long id, String roleName) {
+        User user = findById(id);
+        user.removeAuthority(roleName);
+        return userRepo.save(user).getAuthorities().stream().filter(Role::isEnabled).collect(Collectors.toSet());
     }
 }

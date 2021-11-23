@@ -3,6 +3,7 @@ package pl.remplewicz.crowding.model;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
+import pl.remplewicz.crowding.util.validators.EnumValidator;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -39,7 +40,9 @@ public class Role implements GrantedAuthority {
     @JoinColumn(name = "user_id")
     private User user;
 
+    // todo validate what is persisting to db
     @Column(columnDefinition = "varchar(128)")
+    @EnumValidator(acceptedValues = {Role.ADMIN, Role.USER}, message = "Invalid dataType")
     private String authority;
 
     private boolean enabled = false;
