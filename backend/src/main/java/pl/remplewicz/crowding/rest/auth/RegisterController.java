@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.remplewicz.crowding.dto.UserDto;
 import pl.remplewicz.crowding.exception.DuplicationException;
 import pl.remplewicz.crowding.model.User;
-import pl.remplewicz.crowding.service.UserService;
+import pl.remplewicz.crowding.service.IUserService;
 import pl.remplewicz.crowding.util.converter.UserConverter;
 
 import javax.validation.Valid;
@@ -26,10 +26,10 @@ import javax.validation.Valid;
 @RequestMapping("api/public")
 public class RegisterController {
 
-    private final UserService userService;
+    private final IUserService userService;
 
     @Autowired
-    public RegisterController(UserService userService) {
+    public RegisterController(IUserService userService) {
         this.userService = userService;
     }
 

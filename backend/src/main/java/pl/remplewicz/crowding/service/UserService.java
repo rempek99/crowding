@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  */
 
 @Service
-public class UserService {
+public class UserService implements IUserService {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
 
@@ -36,14 +36,17 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Override
     public User findById(Long id) {
         return userRepo.findById(id).orElseThrow(() -> NotFoundException.createIdNotFound(id));
     }
 
+    @Override
     public User findByUsername(String username) {
         return userRepo.findByUsername(username).orElseThrow(() -> NotFoundException.createUsernameNotFound(username));
     }
 
+    @Override
     public User register(User user) throws DuplicationException {
         //encode password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -64,6 +67,7 @@ public class UserService {
         return userRepo.findAll().stream().anyMatch(user -> user.getUsername().equals(username));
     }
 
+    @Override
     public User test(String login) {
         User tester = new User(login, passwordEncoder.encode("1234"));
         userRepo.saveAndFlush(tester);
@@ -71,12 +75,14 @@ public class UserService {
         return userRepo.save(tester);
     }
 
+    @Override
     public Set<Role> activateUserRole(Long id, String roleName) {
         User user = findById(id);
         user.addAuthority(roleName);
         return userRepo.save(user).getAuthorities().stream().filter(Role::isEnabled).collect(Collectors.toSet());
     }
 
+    @Override
     public Set<Role> deactivateUserRole(Long id, String roleName) {
         User user = findById(id);
         user.removeAuthority(roleName);

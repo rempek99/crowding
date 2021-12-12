@@ -17,7 +17,7 @@ import pl.remplewicz.crowding.dto.UserRolesDto;
 import pl.remplewicz.crowding.model.Role;
 import pl.remplewicz.crowding.model.User;
 import pl.remplewicz.crowding.model.UserInfo;
-import pl.remplewicz.crowding.service.UserService;
+import pl.remplewicz.crowding.service.IUserService;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -29,10 +29,10 @@ import java.util.stream.Collectors;
 @RequestMapping("api/user")
 public class UserController {
 
-    private final UserService userService;
+    private final IUserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(IUserService userService) {
         this.userService = userService;
     }
 

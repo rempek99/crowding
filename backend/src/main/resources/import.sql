@@ -33,3 +33,10 @@ INSERT INTO public.user_info (id, age, firstname, gender, surname, user_id) VALU
 INSERT INTO public.user_info (id, age, firstname, gender, surname, user_id) VALUES (-3, 26, 'Markus', 'MALE', 'Darts', -3);
 INSERT INTO public.user_info (id, age, firstname, gender, surname, user_id) VALUES (-5, 28, 'Marry', 'FEMALE', 'Jane', -5);
 INSERT INTO public.user_info (id, age, firstname, gender, surname, user_id) VALUES (-4, 27, 'Rosie', 'FEMALE', 'Black', -4);
+
+-- CROWDING EVENTS
+INSERT INTO public.crowding_event(id, description, slots, event_date, title, organizer_id) VALUES (-1, 'bla bla bla', 5, '2021-12-12 12:00:00+01', 'Test event', -2);
+
+-- CROWDING EVENTS PARTICIPANTS
+INSERT INTO public.crowding_event_participants(crowding_event_id, participants_id) VALUES (-1,-3);
+INSERT INTO public.crowding_event_participants(crowding_event_id, participants_id) VALUES (-1,-4);

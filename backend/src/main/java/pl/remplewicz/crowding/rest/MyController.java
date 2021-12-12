@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.remplewicz.crowding.dto.UserDto;
 import pl.remplewicz.crowding.model.Role;
+import pl.remplewicz.crowding.service.IUserService;
 import pl.remplewicz.crowding.service.UserService;
 import pl.remplewicz.crowding.util.converter.UserConverter;
 
@@ -45,7 +46,7 @@ public class MyController {
     }
 
     @Autowired
-    UserService userService;
+    IUserService userService;
 
     @PostMapping("public/test")
     public UserDto test(@RequestBody String login){
