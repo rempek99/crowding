@@ -17,10 +17,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import pl.remplewicz.R;
+import pl.remplewicz.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment{
 
-    private OnMapReadyCallback callback = new OnMapReadyCallback() {
+    private FragmentHomeBinding binding;
+    private HomeViewModel viewModel;
+    private final OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         /**
          * Manipulates the map once available.
@@ -40,11 +43,13 @@ public class HomeFragment extends Fragment{
         }
     };
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        this.viewModel = new HomeViewModel();
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 

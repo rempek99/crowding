@@ -32,6 +32,9 @@ public class CrowdingEvent {
 
     private int slots;
 
+    @ManyToOne
+    private EventLocation location;
+
     @OneToOne
     private User organizer;
 

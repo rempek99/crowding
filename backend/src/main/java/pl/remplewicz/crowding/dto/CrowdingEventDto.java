@@ -20,8 +20,10 @@ import java.time.LocalDateTime;
 public class CrowdingEventDto {
 
     private String title;
-    private LocalDateTime eventDate;
+//    private LocalDateTime eventDate;
     private String description;
     private int participants;
     private int slots;
+    private double latitude;
+    private double longitude;
 }

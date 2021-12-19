@@ -23,9 +23,11 @@ public class CrowdingEventConverter {
         return CrowdingEventDto.builder()
                 .title(crowdingEvent.getTitle())
                 .description(crowdingEvent.getDescription())
-                .eventDate(crowdingEvent.getEventDate())
+//                .eventDate(crowdingEvent.getEventDate())
                 .participants(crowdingEvent.getParticipants().size())
                 .slots(crowdingEvent.getSlots())
+                .longitude(crowdingEvent.getLocation().getLongitude())
+                .latitude(crowdingEvent.getLocation().getLatitude())
                 .build();
     }
 

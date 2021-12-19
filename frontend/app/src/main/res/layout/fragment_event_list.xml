@@ -5,7 +5,7 @@
     android:background="@color/purple_200"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.list.SecondFragment">
+    tools:context=".ui.list.EventList">
 
     <TextView
         android:id="@+id/secondFragmentTextView"
