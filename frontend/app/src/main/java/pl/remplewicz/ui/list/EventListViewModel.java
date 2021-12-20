@@ -2,76 +2,47 @@ package pl.remplewicz.ui.list;
 
 import android.content.Context;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.FutureTask;
 
+import pl.remplewicz.api.CrowdingApi;
+import pl.remplewicz.api.RetrofitInstance;
 import pl.remplewicz.model.CrowdingEvent;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EventListViewModel extends ViewModel {
 
-    private final Context context;
-    private final MutableLiveData<List<CrowdingEvent>> events = new MutableLiveData<>();
+    private  MutableLiveData<List<CrowdingEvent>> events;
 
-    public EventListViewModel(Context context) {
-        this.context = context;
-        fetchEvents();
+    public void fetchEvents() {
+
+        RetrofitInstance.getApi().getEventsCall().enqueue(new Callback<List<CrowdingEvent>>() {
+            @Override
+            public void onResponse(Call<List<CrowdingEvent>> call, Response<List<CrowdingEvent>> response) {
+                events.setValue(response.body());
+                System.out.println("SFECZOWANE");
+            }
+
+            @Override
+            public void onFailure(Call<List<CrowdingEvent>> call, Throwable t) {
+                System.out.println(t);
+            }
+        });
     }
 
-    private void fetchEvents() {
-        List<CrowdingEvent> events = new ArrayList<CrowdingEvent>();
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-        System.out.println("eeeeeeeeeeeeelo");
-        String url = "http://192.168.1.10:8080/api/public/events";
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                url,
-                null,
-                response -> {
-                    Gson gson = new Gson();
-                    System.out.println("-----------------------------");
-                    System.out.println(response.toString());
-                    CrowdingEvent[] responseEvents = gson.fromJson(response.toString(), CrowdingEvent[].class);
-                    this.events.setValue(Arrays.asList(responseEvents));
-                },
-                error -> {
-                    System.out.println(error.getMessage());
-
-                });
-//        JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(
-//                (Request.Method.GET, url, null, response -> {
-//                    Gson gson = new Gson();
-//                    System.out.println("-----------------------------");
-//                    System.out.println(response.toString());
-//                    CrowdingEvent[] responseEvents = gson.fromJson(response.toString(), CrowdingEvent[].class);
-//                    this.events.setValue(Arrays.asList(responseEvents));
-//                }, error -> {
-//                    System.out.println(error.getMessage());
-//
-//                });
-        requestQueue.add(jsonArrayRequest);
-        this.events.setValue(events);
-    }
-
-    public List<CrowdingEvent> getEvents() {
-        if (events.getValue() == null) {
-            fetchEvents();
+    public LiveData<List<CrowdingEvent>> getEvents() {
+        if (events == null) {
+            events = new MutableLiveData<>();
+//            fetchEvents();
         }
-        return events.getValue();
+        return events;
     }
 }

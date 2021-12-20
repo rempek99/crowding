@@ -4,14 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.remplewicz.crowding.dto.UserRolesDto;
 import pl.remplewicz.crowding.exception.DuplicationException;
 import pl.remplewicz.crowding.exception.NotFoundException;
 import pl.remplewicz.crowding.model.Role;
 import pl.remplewicz.crowding.model.User;
 import pl.remplewicz.crowding.repository.UserRepo;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 

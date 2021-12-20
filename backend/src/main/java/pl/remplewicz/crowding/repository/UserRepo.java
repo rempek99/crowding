@@ -5,7 +5,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import pl.remplewicz.crowding.exception.NotFoundException;
 import pl.remplewicz.crowding.model.User;
 
 import java.util.List;

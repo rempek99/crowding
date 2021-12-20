@@ -5,7 +5,6 @@ import org.hibernate.Hibernate;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -27,7 +26,7 @@ import java.util.function.Predicate;
 @ToString
 @RequiredArgsConstructor
 @Table(name = "users")
-public class User implements UserDetails, Serializable {
+public class User implements UserDetails {
 
     // Fields
     @Id
