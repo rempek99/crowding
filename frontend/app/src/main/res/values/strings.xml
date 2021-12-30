@@ -8,4 +8,14 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_list">List</string>
+
+    <!--    Button lables -->
+    <string name="btn_fetch">Fetch</string>
+
+    <!--    Status labels-->
+    <string name="sts_waiting">Waitng...</string>
+    <string name="title_add">Add</string>
+    <string name="sts_fetched">Fetched</string>
+    <string name="sts_error">ERROR</string>
+    <string name="sts_fetching">Fetching...</string>
 </resources>

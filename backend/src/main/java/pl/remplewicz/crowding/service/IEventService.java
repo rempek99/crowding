@@ -8,12 +8,15 @@ package pl.remplewicz.crowding.service;/*
  * Git-Hub Username: rempek99
  */
 
+import pl.remplewicz.crowding.dto.CrowdingEventDto;
 import pl.remplewicz.crowding.model.CrowdingEvent;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface IEventService {
 
-
     List<CrowdingEvent> getAll();
+
+    CrowdingEvent create(CrowdingEvent event, Principal creator) throws Exception;
 }

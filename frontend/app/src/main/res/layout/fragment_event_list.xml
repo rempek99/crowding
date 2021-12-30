@@ -17,21 +17,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/statusText"
-        android:layout_width="200sp"
-        android:layout_height="25sp"
-        android:text="Wating..."
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <Button
         android:id="@+id/testButton"
         android:layout_width="100sp"
         android:layout_height="50sp"
         android:background="#B8B8B8"
-        android:text="Fetch"
+        android:text="@string/btn_fetch"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

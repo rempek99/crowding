@@ -10,16 +10,20 @@ package pl.remplewicz.crowding.dto;/*
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
+
+import java.time.ZonedDateTime;
 
 @Getter
-@Setter
 @Builder
 public class CrowdingEventDto {
 
     private String title;
-//    private LocalDateTime eventDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private ZonedDateTime eventDate;
     private String description;
+    @Nullable
     private int participants;
     private int slots;
     private double latitude;

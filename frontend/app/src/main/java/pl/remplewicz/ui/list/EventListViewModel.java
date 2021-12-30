@@ -1,17 +1,12 @@
 package pl.remplewicz.ui.list;
 
-import android.content.Context;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.FutureTask;
 
-import pl.remplewicz.api.CrowdingApi;
+import pl.remplewicz.R;
 import pl.remplewicz.api.RetrofitInstance;
 import pl.remplewicz.model.CrowdingEvent;
 import retrofit2.Call;
@@ -21,6 +16,7 @@ import retrofit2.Response;
 public class EventListViewModel extends ViewModel {
 
     private  MutableLiveData<List<CrowdingEvent>> events;
+    private final MutableLiveData<Integer> status = new MutableLiveData<>();
 
     public void fetchEvents() {
 
@@ -28,12 +24,12 @@ public class EventListViewModel extends ViewModel {
             @Override
             public void onResponse(Call<List<CrowdingEvent>> call, Response<List<CrowdingEvent>> response) {
                 events.setValue(response.body());
-                System.out.println("SFECZOWANE");
+                status.postValue(R.string.sts_fetched);
             }
 
             @Override
             public void onFailure(Call<List<CrowdingEvent>> call, Throwable t) {
-                System.out.println(t);
+                status.postValue(R.string.sts_error);
             }
         });
     }
@@ -44,5 +40,9 @@ public class EventListViewModel extends ViewModel {
 //            fetchEvents();
         }
         return events;
+    }
+
+    public LiveData<Integer> getStatus(){
+        return status;
     }
 }

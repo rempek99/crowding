@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class DuplicationException extends ResponseStatusException {
 
     private static final String USERNAME_TAKEN_MESSAGE = "Username: '%s' is already taken";
+    private static final String EVENT_EXISTS_MESSAGE= "Username already created event '%s' at given date";
 
     private DuplicationException(HttpStatus status, String reason) {
         super(status, reason);
@@ -23,5 +24,9 @@ public class DuplicationException extends ResponseStatusException {
 
     public static DuplicationException createUsernameTakenException(String username){
         return new DuplicationException(HttpStatus.CONFLICT,String.format(USERNAME_TAKEN_MESSAGE,username));
+    }
+
+    public static Exception createEventAlreadyExistsException(String title) {
+        return new DuplicationException(HttpStatus.CONFLICT,String.format(EVENT_EXISTS_MESSAGE,title));
     }
 }

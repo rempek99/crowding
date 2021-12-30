@@ -15,7 +15,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  * Git-Hub Username: rempek99
  */
 
-@EnableWebMvc
 @Configuration
 public class WebConfig {
 

@@ -9,16 +9,23 @@ package pl.remplewicz.crowding.model;/*
  */
 
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Getter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class EventLocation {
     @Id
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private double latitude;
     private double longitude;
 

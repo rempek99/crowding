@@ -10,4 +10,9 @@
         android:id="@+id/navigation_second_fragment"
         android:icon="@drawable/ic_list_foreground"
         android:title="@string/title_list" />
+
+    <item
+        android:id="@+id/navigation_create_event_fragment"
+        android:icon="@drawable/ic_baseline_add_circle_24"
+        android:title="@string/title_add" />
 </menu>

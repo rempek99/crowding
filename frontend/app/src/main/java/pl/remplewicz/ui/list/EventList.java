@@ -14,6 +14,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,8 +28,6 @@ public class EventList extends Fragment {
 
     private EventListViewModel viewModel;
 
-
-    private TextView statusText;
     private ArrayAdapter<String> adapter;
     private ListView listView;
     private List<String> list = new ArrayList<>();
@@ -42,7 +43,6 @@ public class EventList extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
-        statusText = view.findViewById(R.id.statusText);
         listView = view.findViewById(R.id.crowdingEventList);
         adapter=new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_list_item_1,
@@ -61,21 +61,24 @@ public class EventList extends Fragment {
                 list.clear();
                 list.addAll(events.stream().map(CrowdingEvent::getTitle).collect(Collectors.toList()));
                 adapter.notifyDataSetChanged();
-                statusText.setText("Updated!");
+            }
+        });
+
+        viewModel.getStatus().observe(getViewLifecycleOwner(), status -> {
+            if(status != null) {
+                Snackbar snackbar = Snackbar.make(view,status, BaseTransientBottomBar.LENGTH_SHORT);
+                snackbar.show();
             }
         });
 
 
 
 
-
         Button fetchButton = view.findViewById(R.id.testButton);
-        fetchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                statusText.setText("Fetching...");
-                viewModel.fetchEvents();
-            }
+        fetchButton.setOnClickListener(v -> {
+            Snackbar snackbar = Snackbar.make(view,R.string.sts_fetching, BaseTransientBottomBar.LENGTH_SHORT);
+            snackbar.show();
+            viewModel.fetchEvents();
         });
     }
 }

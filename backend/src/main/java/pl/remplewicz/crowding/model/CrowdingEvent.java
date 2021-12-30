@@ -9,22 +9,37 @@ package pl.remplewicz.crowding.model;/*
  */
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"title", "event_date","organizer_id"})
+)
 public class CrowdingEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    private LocalDateTime eventDate;
+    @Column(name = "event_date")
+    private ZonedDateTime eventDate;
 
     private String title;
 
@@ -32,12 +47,13 @@ public class CrowdingEvent {
 
     private int slots;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private EventLocation location;
 
+    @Setter
     @OneToOne
     private User organizer;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<User> participants = new HashSet<>();
 }

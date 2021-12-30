@@ -15,6 +15,9 @@
             app:destination="@id/navigation_second_fragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"/>
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_create_event_fragment"
+            app:destination="@id/navigation_create_event_fragment" />
     </fragment>
     <fragment
         android:id="@+id/navigation_second_fragment"
@@ -26,6 +29,15 @@
             app:destination="@id/navigation_home"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out"/>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_create_event_fragment"
+        android:name="pl.remplewicz.ui.create.CreateEventFragment"
+        android:label="fragment_add_event"
+        tools:layout="@layout/fragment_create_event" >
+        <action
+            android:id="@+id/action_navigation_create_event_fragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
     </fragment>
 
 </navigation>
