@@ -11,6 +11,7 @@ package pl.remplewicz.crowding.rest.events;/*
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.remplewicz.crowding.dto.CrowdingEventDto;
 import pl.remplewicz.crowding.model.CrowdingEvent;
@@ -41,7 +42,7 @@ public class EventController {
 
     @RolesAllowed(Role.USER)
     @PostMapping("api/events/create")
-    public CrowdingEventDto createEvent(CrowdingEventDto eventDto, Principal principal) throws Exception {
+    public CrowdingEventDto createEvent(@RequestBody CrowdingEventDto eventDto, Principal principal) throws Exception {
         CrowdingEvent event = CrowdingEventConverter.createEntityFromDto(eventDto);
         return CrowdingEventConverter.toDto(eventService.create(event, principal));
     }

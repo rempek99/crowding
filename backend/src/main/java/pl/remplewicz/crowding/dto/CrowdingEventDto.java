@@ -24,8 +24,8 @@ public class CrowdingEventDto {
     private ZonedDateTime eventDate;
     private String description;
     @Nullable
-    private int participants;
-    private int slots;
-    private double latitude;
-    private double longitude;
+    private Integer participants;
+    private Integer slots;
+    private Double latitude;
+    private Double longitude;
 }

@@ -6,17 +6,22 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
+import lombok.Setter;
 import pl.remplewicz.R;
 import pl.remplewicz.api.RetrofitInstance;
 import pl.remplewicz.model.CrowdingEvent;
+import pl.remplewicz.util.InformationBar;
+import pl.remplewicz.util.ResourcesProvider;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class EventListViewModel extends ViewModel {
 
+    @Setter
+    private ResourcesProvider resourcesProvider;
+
     private  MutableLiveData<List<CrowdingEvent>> events;
-    private final MutableLiveData<Integer> status = new MutableLiveData<>();
 
     public void fetchEvents() {
 
@@ -24,12 +29,12 @@ public class EventListViewModel extends ViewModel {
             @Override
             public void onResponse(Call<List<CrowdingEvent>> call, Response<List<CrowdingEvent>> response) {
                 events.setValue(response.body());
-                status.postValue(R.string.sts_fetched);
+                InformationBar.showInfo(resourcesProvider.getString(R.string.sts_fetched));
             }
 
             @Override
             public void onFailure(Call<List<CrowdingEvent>> call, Throwable t) {
-                status.postValue(R.string.sts_error);
+                InformationBar.showInfo(resourcesProvider.getString(R.string.sts_error));
             }
         });
     }
@@ -40,9 +45,5 @@ public class EventListViewModel extends ViewModel {
 //            fetchEvents();
         }
         return events;
-    }
-
-    public LiveData<Integer> getStatus(){
-        return status;
     }
 }

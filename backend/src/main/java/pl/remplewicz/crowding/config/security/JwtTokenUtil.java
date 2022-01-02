@@ -35,21 +35,12 @@ public class JwtTokenUtil {
 
     public String generateAccessToken(User user) {
         return Jwts.builder()
-                .setSubject(format("%s,%s", user.getId(), user.getUsername()))
+                .setSubject(format("%s", user.getUsername()))
                 .setIssuer(jwtIssuer)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationTime)) // 1 week
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
-    }
-
-    public String getUserId(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody();
-
-        return claims.getSubject().split(",")[0];
     }
 
     public String getUsername(String token) {
@@ -58,7 +49,7 @@ public class JwtTokenUtil {
                 .parseClaimsJws(token)
                 .getBody();
 
-        return claims.getSubject().split(",")[1];
+        return claims.getSubject();
     }
 
     public Date getExpirationDate(String token) {

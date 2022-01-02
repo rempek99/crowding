@@ -2,8 +2,6 @@ package pl.remplewicz.api;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.FutureTask;
 
 import pl.remplewicz.model.CrowdingEvent;
 import retrofit2.Call;

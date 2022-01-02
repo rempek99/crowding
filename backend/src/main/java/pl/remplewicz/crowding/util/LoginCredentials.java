@@ -3,7 +3,7 @@ package pl.remplewicz.crowding.util;
 import lombok.Getter;
 
 /*
- * Copyright (c) 2021.
+ * Copyright (c) 2022.
  * All Rights Reserved.
  * Created by:
  * Name: Arkadiusz Remplewicz
