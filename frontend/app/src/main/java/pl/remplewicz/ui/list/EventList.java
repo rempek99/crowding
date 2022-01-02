@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import pl.remplewicz.R;
-import pl.remplewicz.model.CrowdingEvent;
 import pl.remplewicz.util.ResourcesProvider;
 
 public class EventList extends Fragment {
@@ -45,11 +44,6 @@ public class EventList extends Fragment {
         adapter=new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_list_item_1,
                 list);
-        list.add("Dupa");
-        list.add("Dupa");
-        list.add("Dupa");
-        list.add("Dupa");
-        list.add("Dupa");
         list.add("Tap Fetch to download data from database");
         listView.setAdapter(adapter);
 
@@ -57,7 +51,7 @@ public class EventList extends Fragment {
             if(events!=null) {
                 System.out.println(events.size());
                 list.clear();
-                list.addAll(events.stream().map(CrowdingEvent::getTitle).collect(Collectors.toList()));
+                list.addAll(events.stream().map(x -> x.getTitle() + "\t" + x.getParticipants() +" / " + x.getSlots()).collect(Collectors.toList()));
                 adapter.notifyDataSetChanged();
             }
         });

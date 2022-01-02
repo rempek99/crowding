@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,13 +17,21 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import pl.remplewicz.R;
 import pl.remplewicz.databinding.FragmentHomeBinding;
+import pl.remplewicz.model.CrowdingEvent;
+import pl.remplewicz.ui.list.EventListViewModel;
+import pl.remplewicz.util.ResourcesProvider;
 
 public class HomeFragment extends Fragment{
 
     private FragmentHomeBinding binding;
-    private HomeViewModel viewModel;
+    private EventListViewModel viewModel;
+    private GoogleMap mapGoogle;
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         /**
@@ -36,12 +45,33 @@ public class HomeFragment extends Fragment{
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            LatLng mochowo = new LatLng(52.76778751720479, 19.558075570858506);
-            googleMap.addMarker(new MarkerOptions().position(mochowo).title("Marker in Mochowo"));
-//            googleMap.moveCamera(CameraUpdateFactory.newLatLng(mochowo));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mochowo,10));
+            mapGoogle = googleMap;
+            updateMarkers();
         }
     };
+    private List<CrowdingEvent> events = Collections.emptyList();
+
+    private void updateMarkers() {
+        if(mapGoogle ==null) {
+            return;
+        }
+        mapGoogle.clear();
+        List<MarkerOptions> markerOptionsList = new ArrayList<>();
+
+        //EXAMPLE
+        LatLng mochowo = new LatLng(52.76778751720479, 19.558075570858506);
+        markerOptionsList.add(new MarkerOptions().position(mochowo).title("Marker in Mochowo"));
+        //EXAMPLE
+
+        events.forEach(event -> markerOptionsList.add(
+                new MarkerOptions()
+                        .position(new LatLng(event.getLatitude(),event.getLongitude()))
+                        .title(event.getTitle())
+        ));
+
+        markerOptionsList.forEach(mapGoogle::addMarker);
+        mapGoogle.moveCamera(CameraUpdateFactory.newLatLngZoom(mochowo,10));
+    }
 
 
     @Nullable
@@ -49,7 +79,6 @@ public class HomeFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        this.viewModel = new HomeViewModel();
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -58,9 +87,18 @@ public class HomeFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragment_home);
+
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
+
+        viewModel = new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
+        viewModel.setResourcesProvider(new ResourcesProvider(getContext()));
+        viewModel.getEvents().observe(getViewLifecycleOwner(),events -> {
+            this.events = events;
+            updateMarkers();
+        });
+        viewModel.fetchEvents();
     }
 
 
