@@ -20,6 +20,7 @@ import pl.remplewicz.api.RetrofitInstance;
 import pl.remplewicz.model.LoginCredentials;
 import pl.remplewicz.util.AuthTokenStore;
 import pl.remplewicz.util.InformationBar;
+import pl.remplewicz.util.NavigationHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,6 +30,16 @@ public class LoginFragment extends Fragment {
     EditText loginInput, passwordInput;
     private Button regitsterNavBtn, loginButton;
     private String login, password;
+    private Fragment fallbackFragment;
+
+    public LoginFragment() {
+        super();
+    }
+
+    public LoginFragment(Fragment fallbackFragment) {
+        super();
+        this.fallbackFragment = fallbackFragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,7 +68,7 @@ public class LoginFragment extends Fragment {
 
         regitsterNavBtn = view.findViewById(R.id.loginRegisterBtn);
         regitsterNavBtn.setOnClickListener(v ->
-                Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_registerFragment));
+                Navigation.findNavController(view).navigate(R.id.action_navigation_login_fragment_to_navigation_register_fragment));
 
         loginButton = view.findViewById(R.id.loginLoginBtn);
         loginButton.setOnClickListener(v ->
@@ -77,7 +88,11 @@ public class LoginFragment extends Fragment {
                     String token = response.headers().get("Authorization");
                     AuthTokenStore.getInstance().setToken(token);
                     InformationBar.showInfo(getResources().getString(R.string.login_successed));
-                    requireActivity().finish();
+                    if(fallbackFragment!=null){
+                        NavigationHelper.goTo(fallbackFragment);
+                    } else {
+                        NavigationHelper.backToHomeFragment();
+                    }
                 }
                 if(response.code() == 401){
                     InformationBar.showInfo(getResources().getString(R.string.login_failed));

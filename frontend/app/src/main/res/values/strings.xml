@@ -47,4 +47,8 @@
     <string name="registered_successed">Registered</string>
     <string name="different_passwords">Provided passwords are different</string>
     <string name="login_taken">Login taken</string>
+    <string name="openNavDrawer">Navigation Drawer Open</string>
+    <string name="closeNavDrawer">Navigation Drawer Close</string>
+    <string name="event_created">Event Created</string>
+    <string name="login_required">Login Required</string>
 </resources>

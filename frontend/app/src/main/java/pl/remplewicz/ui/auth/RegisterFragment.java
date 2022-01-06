@@ -58,7 +58,7 @@ public class RegisterFragment extends Fragment {
             public void onResponse(Call<LoginCredentials> call, Response<LoginCredentials> response) {
                 if(response.code() == 200) {
                     InformationBar.showInfo(getResources().getString(R.string.registered_successed));
-                    Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_loginFragment);
+                    Navigation.findNavController(view).navigate(R.id.action_navigation_register_fragment_to_navigation_login_fragment);
                 }
                 if(response.code() == 409){
                     InformationBar.showInfo(getResources().getString(R.string.login_taken));

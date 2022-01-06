@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 import pl.remplewicz.R;
 import pl.remplewicz.util.ResourcesProvider;
 
-public class EventList extends Fragment {
+public class EventListFragment extends Fragment {
 
     private EventListViewModel viewModel;
 

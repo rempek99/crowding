@@ -24,11 +24,15 @@ public class RetrofitInstance {
             httpClient.addInterceptor(new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
-                    Request newRequest = chain.request().newBuilder()
-                            .addHeader("Authorization", "Bearer " +
-                                    AuthTokenStore.getInstance().getToken())
-                            .build();
-                    return chain.proceed(newRequest);
+                    String token = AuthTokenStore.getInstance().getToken();
+                    if(token != null) {
+                        Request newRequest = chain.request().newBuilder()
+                                .addHeader("Authorization", "Bearer " +
+                                        token)
+                                .build();
+                        return chain.proceed(newRequest);
+                    }
+                    return chain.proceed(chain.request());
                 }
             });
 

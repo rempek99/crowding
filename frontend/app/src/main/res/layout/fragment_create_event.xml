@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
+    <Button
         android:id="@+id/createEditDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,32 +35,6 @@
 
 
     <EditText
-        android:id="@+id/createEditLongitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:textSize="15sp"
-        android:inputType="numberDecimal"
-        android:hint="@string/longitude"
-        android:minHeight="48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createEditDate" />
-
-    <EditText
-        android:id="@+id/createEditLatitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:textSize="15sp"
-        android:inputType="numberDecimal"
-        android:hint="@string/latitude"
-        android:minHeight="48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createEditLongitude" />
-
-    <EditText
         android:id="@+id/createEditDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -71,7 +45,7 @@
         android:textSize="15sp"
         android:hint="@string/event_description"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/createEditLatitude" />
+        app:layout_constraintTop_toBottomOf="@+id/autocomplete_fragment" />
 
     <EditText
         android:id="@+id/createEditSlots"
@@ -86,6 +60,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createEditDescription" />
 
+
+    <fragment android:id="@+id/autocomplete_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createEditDate"
+        />
+
     <Button
         android:id="@+id/createEventBtn"
         android:layout_width="wrap_content"
@@ -93,4 +76,6 @@
         android:text="@string/create_event"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

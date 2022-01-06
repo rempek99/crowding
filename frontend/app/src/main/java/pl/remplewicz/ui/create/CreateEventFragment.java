@@ -1,10 +1,12 @@
 package pl.remplewicz.ui.create;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.icu.util.Calendar;
 import android.os.Bundle;
-import android.util.ArrayMap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,22 +19,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
-import org.json.JSONObject;
-
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Map;
+import java.util.Arrays;
 
-import okhttp3.RequestBody;
 import pl.remplewicz.R;
 import pl.remplewicz.api.RetrofitInstance;
 import pl.remplewicz.model.CrowdingEvent;
-import pl.remplewicz.model.response.CrowdingEventResponse;
-import pl.remplewicz.util.CustomObjectMapper;
+import pl.remplewicz.util.InformationBar;
+import pl.remplewicz.util.NavigationHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,11 +39,14 @@ import retrofit2.Response;
 
 public class CreateEventFragment extends Fragment {
 
-    private EditText title, date, longitude, latitude, description, slots;
-    private Button createButton;
+    private EditText title, description, slots;
+    private Button createButton, datePickerButton;
     private ZonedDateTime eventDateTime;
     private boolean datetimePickerOpened = false;
     private int mYear, mMonth, mDay, mHour, mMinute;
+    private double latitude,longitude;
+
+    private static int AUTOCOMPLETE_REQUEST_CODE = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,15 +59,39 @@ public class CreateEventFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         title = view.findViewById(R.id.createEditTitle);
-        date = view.findViewById(R.id.createEditDate);
-        longitude = view.findViewById(R.id.createEditLongitude);
-        latitude = view.findViewById(R.id.createEditLatitude);
+        datePickerButton = view.findViewById(R.id.createEditDate);
         description = view.findViewById(R.id.createEditDescription);
         slots = view.findViewById(R.id.createEditSlots);
         createButton = view.findViewById(R.id.createEventBtn);
         createButton.setOnClickListener(v -> submit());
-        date.setOnClickListener(v -> showDateTimePicker());
+        datePickerButton.setOnClickListener(v -> showDateTimePicker());
 
+
+        // Initialize the AutocompleteSupportFragment.
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+        autocompleteFragment.setCountries("PL");
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                latitude = place.getLatLng().latitude;
+                longitude = place.getLatLng().longitude;
+            }
+
+
+            @Override
+            public void onError(@NonNull Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
 
     }
 
@@ -89,7 +115,7 @@ public class CreateEventFragment extends Fragment {
                             dateTimeTextBuilder.append(hourOfDay + ":" + minute);
                             mHour = hourOfDay;
                             mMinute = minute;
-                            date.setText(dateTimeTextBuilder.toString());
+                            datePickerButton.setText(dateTimeTextBuilder.toString());
                             eventDateTime = ZonedDateTime.of(mYear, mMonth, mDay, mHour, mMinute, 0, 0, ZonedDateTime.now().getZone());
                             datetimePickerOpened = false;
                         }
@@ -111,30 +137,28 @@ public class CreateEventFragment extends Fragment {
     }
 
     public void submit() {
-        System.out.println(date.getText().toString());
+        System.out.println(datePickerButton.getText().toString());
         CrowdingEvent event = CrowdingEvent.builder()
                 .title(title.getText().toString())
                 .eventDate(eventDateTime)
                 .description(description.getText().toString())
-                .latitude(Double.parseDouble(latitude.getText().toString()))
-                .longitude(Double.parseDouble(longitude.getText().toString()))
+                .latitude(latitude)
+                .longitude(longitude)
                 .slots(Integer.parseInt(slots.getText().toString()))
                 .build();
 
-
-//        Map<String, Object> jsonParams = new ArrayMap<>();
-////put something inside the map, could be null
-//        jsonParams.put("title","testTitle");
-//        jsonParams.put("eventDate","2021-12-12T12:00:00+01:00");
-//        jsonParams.put("slots",5);
-//        jsonParams.put("latitude",51.2);
-//        jsonParams.put("longitude",52.3);
         try {
-//            RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),(new JSONObject(jsonParams)).toString());
             RetrofitInstance.getApi().createEvent(event).enqueue(new Callback<CrowdingEvent>() {
                 @Override
                 public void onResponse(Call<CrowdingEvent> call, Response<CrowdingEvent> response) {
-                    System.out.println(response);
+                    if (response.code() == 200) {
+                        InformationBar.showInfo(getString(R.string.event_created));
+                        NavigationHelper.backToHomeFragment();
+                    }
+                    if (response.code() == 401) {
+                        InformationBar.showInfo(getString(R.string.login_required));
+                        NavigationHelper.showLoginFragment(CreateEventFragment.this);
+                    }
                 }
 
                 @Override
@@ -142,8 +166,7 @@ public class CreateEventFragment extends Fragment {
                     t.printStackTrace();
                 }
             });
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
