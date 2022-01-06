@@ -1,9 +1,11 @@
 package pl.remplewicz.ui.home;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,11 +17,14 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import pl.remplewicz.R;
 import pl.remplewicz.databinding.FragmentHomeBinding;
@@ -27,11 +32,14 @@ import pl.remplewicz.model.CrowdingEvent;
 import pl.remplewicz.ui.list.EventListViewModel;
 import pl.remplewicz.util.ResourcesProvider;
 
-public class HomeFragment extends Fragment{
+public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private EventListViewModel viewModel;
     private GoogleMap mapGoogle;
+    private Map<Marker, CrowdingEvent> markerCrowdingEventMap = new HashMap<>();
+    private AlertDialog detailsPopup;
+
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         /**
@@ -46,13 +54,37 @@ public class HomeFragment extends Fragment{
         @Override
         public void onMapReady(GoogleMap googleMap) {
             mapGoogle = googleMap;
+            mapGoogle.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener() {
+                @Override
+                public void onInfoWindowLongClick(@NonNull Marker marker) {
+                    createEventDetailDialog(markerCrowdingEventMap.get(marker));
+
+                }
+            });
             updateMarkers();
         }
     };
+
+    private void createEventDetailDialog(CrowdingEvent crowdingEvent) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final View detailsPopupView = getLayoutInflater().inflate(R.layout.crowding_event_details_popout, null);
+        TextView eventTitle = detailsPopupView.findViewById(R.id.details_title);
+        eventTitle.setText(crowdingEvent.getTitle());
+        TextView eventDescription = detailsPopupView.findViewById(R.id.details_description);
+        eventDescription.setText(crowdingEvent.getDescription());
+        TextView eventLongitude = detailsPopupView.findViewById(R.id.details_logitude);
+        eventLongitude.setText(String.valueOf(crowdingEvent.getLongitude()));
+        TextView eventLatitude = detailsPopupView.findViewById(R.id.details_latitude);
+        eventLatitude.setText(String.valueOf(crowdingEvent.getLatitude()));
+        builder.setView(detailsPopupView);
+        detailsPopup = builder.create();
+        detailsPopup.show();
+    }
+
     private List<CrowdingEvent> events = Collections.emptyList();
 
     private void updateMarkers() {
-        if(mapGoogle ==null) {
+        if (mapGoogle == null) {
             return;
         }
         mapGoogle.clear();
@@ -63,14 +95,15 @@ public class HomeFragment extends Fragment{
         markerOptionsList.add(new MarkerOptions().position(mochowo).title("Marker in Mochowo"));
         //EXAMPLE
 
-        events.forEach(event -> markerOptionsList.add(
-                new MarkerOptions()
-                        .position(new LatLng(event.getLatitude(),event.getLongitude()))
-                        .title(event.getTitle())
-        ));
-
-        markerOptionsList.forEach(mapGoogle::addMarker);
-        mapGoogle.moveCamera(CameraUpdateFactory.newLatLngZoom(mochowo,10));
+        events.forEach(event -> {
+                    MarkerOptions markerOptions = new MarkerOptions()
+                            .position(new LatLng(event.getLatitude(), event.getLongitude()))
+                            .title(event.getTitle());
+                    Marker marker = mapGoogle.addMarker(markerOptions);
+                    markerCrowdingEventMap.put(marker, event);
+                }
+        );
+        mapGoogle.moveCamera(CameraUpdateFactory.newLatLngZoom(mochowo, 10));
     }
 
 
@@ -94,33 +127,12 @@ public class HomeFragment extends Fragment{
 
         viewModel = new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
         viewModel.setResourcesProvider(new ResourcesProvider(getContext()));
-        viewModel.getEvents().observe(getViewLifecycleOwner(),events -> {
+        viewModel.getEvents().observe(getViewLifecycleOwner(), events -> {
             this.events = events;
             updateMarkers();
         });
         viewModel.fetchEvents();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //
