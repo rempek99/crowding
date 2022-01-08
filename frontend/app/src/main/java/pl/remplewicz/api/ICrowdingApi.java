@@ -4,6 +4,7 @@ import java.util.List;
 
 import pl.remplewicz.model.CrowdingEvent;
 import pl.remplewicz.model.LoginCredentials;
+import pl.remplewicz.model.UserDetails;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -25,4 +26,7 @@ public interface ICrowdingApi {
     @POST("/api/public/register")
     Call<LoginCredentials> register(@Query("password") String password,
                                     @Query("username") String username);
+
+    @GET("/api/user/details")
+    Call<UserDetails> getDetails();
 }

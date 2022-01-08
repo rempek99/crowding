@@ -27,14 +27,12 @@ import java.util.List;
 import java.util.Map;
 
 import pl.remplewicz.R;
-import pl.remplewicz.databinding.FragmentHomeBinding;
 import pl.remplewicz.model.CrowdingEvent;
 import pl.remplewicz.ui.list.EventListViewModel;
 import pl.remplewicz.util.ResourcesProvider;
 
 public class HomeFragment extends Fragment {
 
-    private FragmentHomeBinding binding;
     private EventListViewModel viewModel;
     private GoogleMap mapGoogle;
     private Map<Marker, CrowdingEvent> markerCrowdingEventMap = new HashMap<>();

@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.remplewicz.crowding.dto.UserDetailsDto;
 import pl.remplewicz.crowding.dto.UserRolesDto;
+import pl.remplewicz.crowding.exception.UserAccountException;
 import pl.remplewicz.crowding.model.Role;
 import pl.remplewicz.crowding.model.User;
 import pl.remplewicz.crowding.model.UserInfo;
 import pl.remplewicz.crowding.service.IUserService;
 
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import java.security.Principal;
 import java.util.Set;
@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping("details/{id}")
-    @PermitAll
+    @RolesAllowed(Role.ADMIN)
     public UserDetailsDto getUserDetails(Principal principal, @PathVariable Long id) {
         User user = userService.findById(id);
         User caller = userService.findByUsername(principal.getName());
@@ -51,6 +51,22 @@ public class UserController {
                     .build();
         }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    }
+
+    @GetMapping("details")
+    @RolesAllowed(Role.USER)
+    public UserDetailsDto getUserDetails(Principal principal) throws UserAccountException.UserNotFoundAccountException {
+        User caller = userService.findByUsername(principal.getName());
+        if(caller == null) {
+            throw UserAccountException.createUserNotFoundException();
+        }
+            UserInfo userInfo = caller.getUserInfo();
+            return UserDetailsDto.builder()
+                    .firstname(userInfo.getFirstname())
+                    .surname(userInfo.getSurname())
+                    .age(userInfo.getAge())
+                    .gender(userInfo.getGender().name())
+                    .build();
     }
 
     @PutMapping("roles/activate/{id}/{role}")

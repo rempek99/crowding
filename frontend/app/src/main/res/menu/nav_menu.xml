@@ -25,4 +25,9 @@
         android:icon="@drawable/ic_baseline_login_24"
         android:title="@string/prompt_login" />
 
+    <item
+        android:id="@+id/navigation_logout"
+        android:icon="@drawable/ic_baseline_keyboard_return_24"
+        android:title="@string/prompt_logout" />
+
 </menu>

@@ -1,5 +1,7 @@
 package pl.remplewicz.util;
 
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -13,16 +15,24 @@ public class NavigationHelper {
     @Setter
     public static FragmentActivity mainActivity;
 
+    @Setter
+    public static DrawerLayout drawerLayout;
+
     public static void backToHomeFragment() {
-        mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+        goTo(new HomeFragment());
     }
 
 
     public static void showLoginFragment(Fragment fragment) {
-        mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LoginFragment(fragment)).commit();
+        goTo(new LoginFragment(fragment));
     }
 
     public static void goTo(Fragment fragment) {
-        mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+
+        //todo check if given fragment is visible
+        mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, fragment.getTag()).commit();
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
     }
 }

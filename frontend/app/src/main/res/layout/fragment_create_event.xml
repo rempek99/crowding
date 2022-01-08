@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.create.CreateEventFragment"
-    android:layout_margin="20sp">
+    android:layout_margin="20sp"
+    android:tag="CREATE_EVENT_FRAGMENT">
 
 
     <EditText

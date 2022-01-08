@@ -19,6 +19,7 @@ android {
             buildConfigField "String", "BACKEND_URL", "\""+getBackendUrl()+"\""
             buildConfigField "String", "MAPS_KEY", "\""+getMapsApiKey()+"\""
         }
+        minSdkVersion 29
 
     }
 
@@ -70,6 +71,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
 
 }
 

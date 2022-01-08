@@ -51,4 +51,8 @@
     <string name="closeNavDrawer">Navigation Drawer Close</string>
     <string name="event_created">Event Created</string>
     <string name="login_required">Login Required</string>
+    <string name="not_logged_in">Not logged in</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="edit">Edit</string>
+    <string name="prompt_logout">Logout</string>
 </resources>

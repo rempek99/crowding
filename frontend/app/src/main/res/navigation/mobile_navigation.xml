@@ -35,5 +35,10 @@
             android:id="@+id/action_navigation_register_fragment_to_navigation_login_fragment"
             app:destination="@id/navigation_login_fragment" />
     </fragment>
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="pl.remplewicz.UserProfileFragment"
+        android:label="fragment_user_profile"
+        tools:layout="@layout/fragment_user_profile" />
 
 </navigation>
