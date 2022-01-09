@@ -7,8 +7,6 @@ import java.beans.PropertyChangeSupport;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-import lombok.Getter;
-
 public class AuthTokenStore {
 
     private AuthTokenStore() {
@@ -19,8 +17,23 @@ public class AuthTokenStore {
 
     private PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
-    @Getter
     private String token;
+
+    public String getToken() {
+        if(token!=null) {
+            byte[] bytes = Base64.getDecoder().decode(token.split("\\.")[1]);
+            String string = new String(bytes, StandardCharsets.UTF_8);
+            try {
+                JSONObject json = new JSONObject(string);
+                if((Integer) json.get("exp") > System.currentTimeMillis()){
+                    setToken(null);
+                }
+            } catch (Exception ex) {
+                return null;
+            }
+        }
+        return token;
+    }
 
     public void setToken(String token) {
         String oldValue = this.token;

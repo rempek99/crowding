@@ -1,4 +1,4 @@
-package pl.remplewicz.ui.create;
+package pl.remplewicz.ui.events;
 
 import static android.content.ContentValues.TAG;
 
@@ -46,8 +46,6 @@ public class CreateEventFragment extends Fragment {
     private int mYear, mMonth, mDay, mHour, mMinute;
     private double latitude,longitude;
 
-    private static int AUTOCOMPLETE_REQUEST_CODE = 1;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,6 +55,7 @@ public class CreateEventFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        requireActivity().setTitle(getString(R.string.title_create_event));
 
         title = view.findViewById(R.id.createEditTitle);
         datePickerButton = view.findViewById(R.id.createEditDate);

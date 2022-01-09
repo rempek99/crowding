@@ -32,6 +32,7 @@ public class EventListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        requireActivity().setTitle(getString(R.string.title_list));
         return inflater.inflate(R.layout.fragment_event_list, container, false);
     }
 

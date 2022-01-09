@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,10 +26,16 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
+import pl.remplewicz.ui.events.EventDetailsFragment;
 import pl.remplewicz.R;
 import pl.remplewicz.model.CrowdingEvent;
 import pl.remplewicz.ui.list.EventListViewModel;
+import pl.remplewicz.util.AuthTokenStore;
+import pl.remplewicz.util.InformationBar;
+import pl.remplewicz.util.NavigationHelper;
+import pl.remplewicz.util.PrettyStringFormatter;
 import pl.remplewicz.util.ResourcesProvider;
 
 public class HomeFragment extends Fragment {
@@ -55,7 +62,7 @@ public class HomeFragment extends Fragment {
             mapGoogle.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener() {
                 @Override
                 public void onInfoWindowLongClick(@NonNull Marker marker) {
-                    createEventDetailDialog(markerCrowdingEventMap.get(marker));
+                    createEventDetailDialog(Objects.requireNonNull(markerCrowdingEventMap.get(marker)));
 
                 }
             });
@@ -65,16 +72,23 @@ public class HomeFragment extends Fragment {
 
     private void createEventDetailDialog(CrowdingEvent crowdingEvent) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        final View detailsPopupView = getLayoutInflater().inflate(R.layout.crowding_event_details_popout, null);
-        TextView eventTitle = detailsPopupView.findViewById(R.id.details_title);
+        final View detailsPopupView = getLayoutInflater().inflate(R.layout.crowding_event_details_popup, null);
+        TextView eventTitle = detailsPopupView.findViewById(R.id.popup_event_title);
         eventTitle.setText(crowdingEvent.getTitle());
-        TextView eventDescription = detailsPopupView.findViewById(R.id.details_description);
-        eventDescription.setText(crowdingEvent.getDescription());
-        TextView eventLongitude = detailsPopupView.findViewById(R.id.details_logitude);
-        eventLongitude.setText(String.valueOf(crowdingEvent.getLongitude()));
-        TextView eventLatitude = detailsPopupView.findViewById(R.id.details_latitude);
-        eventLatitude.setText(String.valueOf(crowdingEvent.getLatitude()));
+        TextView eventDate = detailsPopupView.findViewById(R.id.popup_event_date);
+        eventDate.setText(PrettyStringFormatter.prettyDate(crowdingEvent.getEventDate()));
+        TextView eventSlots = detailsPopupView.findViewById(R.id.popup_event_slots);
+        eventSlots.setText(String.format(getString(R.string.numberOfNumberPattern), crowdingEvent.getParticipants(), crowdingEvent.getSlots()));
         builder.setView(detailsPopupView);
+        Button detailsBtn = detailsPopupView.findViewById(R.id.popup_event_details_button);
+        detailsBtn.setOnClickListener(l -> {
+            if(AuthTokenStore.getInstance().getToken() == null){
+                InformationBar.showInfo(getString(R.string.login_required));
+                return;
+            }
+            NavigationHelper.goTo(new EventDetailsFragment());
+            detailsPopup.dismiss();
+        });
         detailsPopup = builder.create();
         detailsPopup.show();
     }
@@ -110,6 +124,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        requireActivity().setTitle(getString(R.string.title_home));
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 

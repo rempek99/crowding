@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import lombok.Setter;
 import pl.remplewicz.R;
-import pl.remplewicz.ui.auth.LoginFragment;
+import pl.remplewicz.ui.user.LoginFragment;
 import pl.remplewicz.ui.home.HomeFragment;
 
 public class NavigationHelper {

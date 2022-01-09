@@ -2,14 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="10sp">
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:background="@drawable/border_background"
+    >
 
     <TextView
-        android:id="@+id/details_title"
+        android:id="@+id/popup_event_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="dupa"
+        android:text="@string/app_name"
         android:textAlignment="center"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,34 +19,33 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/details_description"
+        android:id="@+id/popup_event_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="128dp"
-        android:text="dupa"
+        android:layout_marginTop="8dp"
+        android:text="@string/app_name"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/details_title" />
+        app:layout_constraintTop_toBottomOf="@+id/popup_event_title" />
 
     <TextView
-        android:id="@+id/details_logitude"
+        android:id="@+id/popup_event_slots"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="dupa"
+        android:text="@string/app_name"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/details_description" />
+        app:layout_constraintTop_toBottomOf="@+id/popup_event_date" />
 
-    <TextView
-        android:id="@+id/details_latitude"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/popup_event_details_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="dupa"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/details_logitude" />
+        android:text="@string/details"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/popup_event_slots" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

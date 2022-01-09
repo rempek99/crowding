@@ -1,4 +1,4 @@
-package pl.remplewicz.ui.auth;
+package pl.remplewicz.ui.user;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -35,6 +35,7 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        requireActivity().setTitle(getString(R.string.title_register));
         this.view = view;
         loginInput = view.findViewById(R.id.registerEditLogin);
         passwordInput = view.findViewById(R.id.registerEditPassword);

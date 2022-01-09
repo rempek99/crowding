@@ -1,4 +1,4 @@
-package pl.remplewicz.ui.auth;
+package pl.remplewicz.ui.user;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -50,6 +50,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        requireActivity().setTitle(getString(R.string.title_login));
 
         loginInput = view.findViewById(R.id.loginEditLogin);
         passwordInput = view.findViewById(R.id.loginEditPassword);

@@ -13,7 +13,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_login_fragment"
-        android:name="pl.remplewicz.ui.auth.LoginFragment"
+        android:name="pl.remplewicz.ui.user.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -22,13 +22,13 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_create_event_fragment"
-        android:name="pl.remplewicz.ui.create.CreateEventFragment"
+        android:name="pl.remplewicz.ui.events.CreateEventFragment"
         android:label="fragment_create_event"
         tools:layout="@layout/fragment_create_event" >
     </fragment>
     <fragment
         android:id="@+id/navigation_register_fragment"
-        android:name="pl.remplewicz.ui.auth.RegisterFragment"
+        android:name="pl.remplewicz.ui.user.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/userProfileFragment"
-        android:name="pl.remplewicz.UserProfileFragment"
+        android:name="pl.remplewicz.ui.user.UserProfileFragment"
         android:label="fragment_user_profile"
         tools:layout="@layout/fragment_user_profile" />
 

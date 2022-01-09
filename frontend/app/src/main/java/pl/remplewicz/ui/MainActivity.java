@@ -19,10 +19,10 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.navigation.NavigationView;
 
 import pl.remplewicz.R;
-import pl.remplewicz.UserProfileFragment;
+import pl.remplewicz.ui.user.UserProfileFragment;
 import pl.remplewicz.databinding.ActivityMainBinding;
-import pl.remplewicz.ui.auth.LoginFragment;
-import pl.remplewicz.ui.create.CreateEventFragment;
+import pl.remplewicz.ui.user.LoginFragment;
+import pl.remplewicz.ui.events.CreateEventFragment;
 import pl.remplewicz.ui.home.HomeFragment;
 import pl.remplewicz.ui.list.EventListFragment;
 import pl.remplewicz.util.AuthTokenStore;

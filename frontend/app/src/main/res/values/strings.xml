@@ -55,4 +55,12 @@
     <string name="profile_picture">Profile Picture</string>
     <string name="edit">Edit</string>
     <string name="prompt_logout">Logout</string>
+    <string name="blank">Blank</string>
+    <string name="details">Details</string>
+    <string name="numberOfNumberPattern">%1$d / %2$d</string>
+    <string name="title_login">Login</string>
+    <string name="title_register">Register</string>
+    <string name="title_create_event">Create Event</string>
+    <string name="title_profile">Your Profile</string>
+    <string name="title_event_details">Event Details</string>
 </resources>
