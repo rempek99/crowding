@@ -63,4 +63,13 @@
     <string name="title_create_event">Create Event</string>
     <string name="title_profile">Your Profile</string>
     <string name="title_event_details">Event Details</string>
+    <string name="title_date">Date</string>
+    <string name="title_organizer">Organizer</string>
+    <string name="title_participants">Participants</string>
+    <string name="empty">Empty</string>
+    <string name="title_slots">Slots</string>
+    <string name="title_location">Location</string>
+    <string name="title_description">Description</string>
+    <string name="signed_in">Signed in</string>
+    <string name="cannotSignIn">Cannot Sign In</string>
 </resources>

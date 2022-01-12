@@ -20,4 +20,14 @@ public class PrettyStringFormatter {
         sb.append(String.format(Locale.ROOT,"%02d",dateTime.getMinute()));
         return sb.toString();
     }
+
+    public static String prettyLocation(Double latitude, Double longitude) {
+        StringBuilder sb = new StringBuilder();
+        sb.append('(');
+        sb.append(latitude);
+        sb.append(';');
+        sb.append(longitude);
+        sb.append(')');
+        return sb.toString();
+    }
 }

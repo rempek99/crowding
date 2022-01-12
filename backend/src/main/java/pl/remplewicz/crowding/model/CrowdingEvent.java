@@ -54,6 +54,7 @@ public class CrowdingEvent {
     @OneToOne
     private User organizer;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    // todo defining key on userid
+    @ManyToMany(cascade = CascadeType.ALL)
     private Set<User> participants = new HashSet<>();
 }

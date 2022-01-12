@@ -15,7 +15,6 @@ import java.util.Locale;
 import pl.remplewicz.R;
 import pl.remplewicz.api.RetrofitInstance;
 import pl.remplewicz.model.UserDetails;
-import pl.remplewicz.util.AuthTokenStore;
 import pl.remplewicz.util.InformationBar;
 import pl.remplewicz.util.NavigationHelper;
 import retrofit2.Call;
@@ -43,7 +42,7 @@ public class UserProfileFragment extends Fragment {
         gender = view.findViewById(R.id.user_profile_gender);
         age = view.findViewById(R.id.user_profile_age);
 
-        RetrofitInstance.getApi().getDetails().enqueue(new Callback<UserDetails>() {
+        RetrofitInstance.getApi().getUserDetails().enqueue(new Callback<UserDetails>() {
             @Override
             public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
                 if (response.code() == 200) {
@@ -64,10 +63,10 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void updateData(UserDetails userDetails) {
-        username.setText(AuthTokenStore.getInstance().getUsername());
-        firstname.setText(userDetails.getFirstname());
-        surname.setText(userDetails.getSurname());
-        gender.setText(userDetails.getGender().toLowerCase(Locale.ROOT));
-        age.setText(String.valueOf(userDetails.getAge()));
+        username.setText(userDetails.getUsername() == null ? "" : userDetails.getUsername());
+        firstname.setText(userDetails.getFirstname() == null ? "" : userDetails.getFirstname());
+        surname.setText(userDetails.getSurname() == null ? "" : userDetails.getSurname());
+        gender.setText(userDetails.getGender() == null ? "" : userDetails.getGender().toLowerCase(Locale.ROOT));
+        age.setText(userDetails.getAge() == null ? "" : String.valueOf(userDetails.getAge()));
     }
 }

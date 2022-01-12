@@ -13,7 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import pl.remplewicz.R;
 import pl.remplewicz.api.RetrofitInstance;
@@ -69,7 +68,7 @@ public class LoginFragment extends Fragment {
 
         regitsterNavBtn = view.findViewById(R.id.loginRegisterBtn);
         regitsterNavBtn.setOnClickListener(v ->
-                Navigation.findNavController(view).navigate(R.id.action_navigation_login_fragment_to_navigation_register_fragment));
+                NavigationHelper.goTo(new RegisterFragment()));
 
         loginButton = view.findViewById(R.id.loginLoginBtn);
         loginButton.setOnClickListener(v ->

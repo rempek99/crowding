@@ -1,5 +1,7 @@
 package pl.remplewicz.ui.list;
 
+import android.location.Location;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -21,11 +23,18 @@ public class EventListViewModel extends ViewModel {
     @Setter
     private ResourcesProvider resourcesProvider;
 
-    private  MutableLiveData<List<CrowdingEvent>> events;
+    private MutableLiveData<List<CrowdingEvent>> events;
+
+    private Location clientLocation;
 
     public void fetchEvents() {
-
-        RetrofitInstance.getApi().getEventsCall().enqueue(new Callback<List<CrowdingEvent>>() {
+        Call<List<CrowdingEvent>> call;
+        if (clientLocation != null) {
+            call = RetrofitInstance.getApi().getNearestEventsCall(clientLocation.getLatitude(), clientLocation.getLongitude());
+        } else {
+            call = RetrofitInstance.getApi().getEventsCall();
+        }
+        call.enqueue(new Callback<List<CrowdingEvent>>() {
             @Override
             public void onResponse(Call<List<CrowdingEvent>> call, Response<List<CrowdingEvent>> response) {
                 events.setValue(response.body());
@@ -37,6 +46,11 @@ public class EventListViewModel extends ViewModel {
                 InformationBar.showInfo(resourcesProvider.getString(R.string.sts_error));
             }
         });
+    }
+
+    public void setClientLocation(Location clientLocation) {
+        this.clientLocation = clientLocation;
+        fetchEvents();
     }
 
     public LiveData<List<CrowdingEvent>> getEvents() {

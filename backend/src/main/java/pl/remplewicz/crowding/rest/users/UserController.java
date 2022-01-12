@@ -19,6 +19,7 @@ import pl.remplewicz.crowding.model.Role;
 import pl.remplewicz.crowding.model.User;
 import pl.remplewicz.crowding.model.UserInfo;
 import pl.remplewicz.crowding.service.IUserService;
+import pl.remplewicz.crowding.util.converter.UserConverter;
 
 import javax.annotation.security.RolesAllowed;
 import java.security.Principal;
@@ -42,13 +43,7 @@ public class UserController {
         User user = userService.findById(id);
         User caller = userService.findByUsername(principal.getName());
         if (user.getUsername().equals(principal.getName()) || caller.hasRole(Role.ADMIN)) {
-            UserInfo userInfo = user.getUserInfo();
-            return UserDetailsDto.builder()
-                    .firstname(userInfo.getFirstname())
-                    .surname(userInfo.getSurname())
-                    .age(userInfo.getAge())
-                    .gender(userInfo.getGender().name())
-                    .build();
+           return UserConverter.toDtoWithDetails(user);
         }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
@@ -57,16 +52,11 @@ public class UserController {
     @RolesAllowed(Role.USER)
     public UserDetailsDto getUserDetails(Principal principal) throws UserAccountException.UserNotFoundAccountException {
         User caller = userService.findByUsername(principal.getName());
+        // todo NPE if caller has not details
         if(caller == null) {
             throw UserAccountException.createUserNotFoundException();
         }
-            UserInfo userInfo = caller.getUserInfo();
-            return UserDetailsDto.builder()
-                    .firstname(userInfo.getFirstname())
-                    .surname(userInfo.getSurname())
-                    .age(userInfo.getAge())
-                    .gender(userInfo.getGender().name())
-                    .build();
+        return UserConverter.toDtoWithDetails(caller);
     }
 
     @PutMapping("roles/activate/{id}/{role}")

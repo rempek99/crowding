@@ -1,5 +1,5 @@
 package pl.remplewicz.crowding.dto;/*
- * Copyright (c) 2021.
+ * Copyright (c) 2022.
  * All Rights Reserved.
  * Created by:
  * Name: Arkadiusz Remplewicz
@@ -8,25 +8,26 @@ package pl.remplewicz.crowding.dto;/*
  * Git-Hub Username: rempek99
  */
 
+
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.lang.Nullable;
 
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 @Getter
 @Builder
-public class CrowdingEventDto {
+public class CrowdingEventDetailsDto {
 
     private Long id;
     private String title;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime eventDate;
     private String description;
-    @Nullable
-    private Integer participants;
     private Integer slots;
     private Double latitude;
     private Double longitude;
+    private UserDetailsDto organizer;
+    private Set<UserDetailsDto> participants;
 }

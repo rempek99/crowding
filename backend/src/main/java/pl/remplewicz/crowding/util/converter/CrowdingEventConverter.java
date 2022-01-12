@@ -8,9 +8,13 @@ package pl.remplewicz.crowding.util.converter;/*
  * Git-Hub Username: rempek99
  */
 
+import pl.remplewicz.crowding.dto.CrowdingEventDetailsDto;
 import pl.remplewicz.crowding.dto.CrowdingEventDto;
+import pl.remplewicz.crowding.dto.CrowdingEventWithDistanceDto;
 import pl.remplewicz.crowding.model.CrowdingEvent;
+import pl.remplewicz.crowding.model.EventDistance;
 import pl.remplewicz.crowding.model.EventLocation;
+import pl.remplewicz.crowding.service.EventService;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +27,7 @@ public class CrowdingEventConverter {
 
     public static CrowdingEventDto toDto(CrowdingEvent crowdingEvent) {
         return CrowdingEventDto.builder()
+                .id(crowdingEvent.getId())
                 .title(crowdingEvent.getTitle())
                 .description(crowdingEvent.getDescription())
                 .eventDate(crowdingEvent.getEventDate())
@@ -43,5 +48,39 @@ public class CrowdingEventConverter {
         return new CrowdingEvent(null, eventDto.getEventDate(), eventDto.getTitle(), eventDto.getDescription(),
                 eventDto.getSlots(), new EventLocation(null, eventDto.getLatitude(), eventDto.getLongitude()),
                 null, Collections.emptySet());
+    }
+
+    public static CrowdingEventDetailsDto toDtoWithDetails(CrowdingEvent crowdingEvent) {
+        return CrowdingEventDetailsDto.builder()
+                .id(crowdingEvent.getId())
+                .title(crowdingEvent.getTitle())
+                .description(crowdingEvent.getDescription())
+                .eventDate(crowdingEvent.getEventDate())
+                .slots(crowdingEvent.getSlots())
+                .participants(UserConverter.toSetDtoWithDetails(crowdingEvent.getParticipants()))
+                .latitude(crowdingEvent.getLocation().getLatitude())
+                .longitude(crowdingEvent.getLocation().getLongitude())
+                .organizer(UserConverter.toDtoWithDetails(crowdingEvent.getOrganizer()))
+                .build();
+
+    }
+
+    public static CrowdingEventWithDistanceDto toDtoWithDistance(EventDistance eventDistance) {
+        CrowdingEvent crowdingEvent = eventDistance.getEvent();
+        return CrowdingEventWithDistanceDto.builder()
+                .id(crowdingEvent.getId())
+                .title(crowdingEvent.getTitle())
+                .description(crowdingEvent.getDescription())
+                .eventDate(crowdingEvent.getEventDate())
+                .slots(crowdingEvent.getSlots())
+                .participants(crowdingEvent.getParticipants().size())
+                .longitude(crowdingEvent.getLocation().getLongitude())
+                .latitude(crowdingEvent.getLocation().getLatitude())
+                .distance(eventDistance.getDistance())
+                .build();
+    }
+
+    public static List<CrowdingEventWithDistanceDto> toDtoWithDistanceList(List<EventDistance> eventDistanceList) {
+        return eventDistanceList.stream().map(CrowdingEventConverter::toDtoWithDistance).collect(Collectors.toList());
     }
 }

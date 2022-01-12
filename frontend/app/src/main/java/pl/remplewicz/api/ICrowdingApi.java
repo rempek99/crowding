@@ -3,18 +3,25 @@ package pl.remplewicz.api;
 import java.util.List;
 
 import pl.remplewicz.model.CrowdingEvent;
+import pl.remplewicz.model.CrowdingEventDetails;
 import pl.remplewicz.model.LoginCredentials;
 import pl.remplewicz.model.UserDetails;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ICrowdingApi {
 
     @GET("/api/public/events")
     Call<List<CrowdingEvent>> getEventsCall();
+
+    @GET("/api/public/events/nearest/{latitude}/{longitude}")
+    Call<List<CrowdingEvent>> getNearestEventsCall(@Path("latitude") Double latitude,
+                                                   @Path("longitude") Double longitude);
 
 
     @POST("/api/events/create")
@@ -28,5 +35,11 @@ public interface ICrowdingApi {
                                     @Query("username") String username);
 
     @GET("/api/user/details")
-    Call<UserDetails> getDetails();
+    Call<UserDetails> getUserDetails();
+
+    @GET("api/events/{id}")
+    Call<CrowdingEventDetails> getEventDetails(@Path("id") Long id);
+
+    @PUT("api/events/sign/{id}")
+    Call<CrowdingEventDetails> signInToEvent(@Path("id") Long id);
 }

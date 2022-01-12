@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationHelper.setDrawerLayout(drawerLayout);
         navigationView = findViewById(R.id.nav_view);
-        menu = navigationView.getMenu();
         navbar_username = navigationView.getHeaderView(0).findViewById(R.id.nav_header_username);
+        menu = navigationView.getMenu();
         navbar_userProfileIcon = navigationView.getHeaderView(0).findViewById(R.id.nav_header_profile_icon);
         AuthTokenStore.getInstance().addPropertyChangeListener(evt -> {
             refreshMenu();
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         String apiKey = CrowdingConstants.MAPS_API_KEY;
         Places.initialize(getApplicationContext(), apiKey);
-        PlacesClient placesClient = Places.createClient(this);
+
         refreshMenu();
     }
 
@@ -101,16 +101,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuItem logout = menu.findItem(R.id.navigation_logout);
         MenuItem login = menu.findItem(R.id.navigation_login_fragment);
         if(AuthTokenStore.getInstance().getToken() == null) {
-            logout.setVisible(false);
-            login.setVisible(true);
+            logout.setEnabled(false);
+            // todo Login button is not visible
+            login.setEnabled(true);
+            navbar_username.setText(R.string.not_logged_in);
         } else {
-            logout.setVisible(true);
-            login.setVisible(false);
+            logout.setEnabled(true);
+            login.setEnabled(false);
             String username = AuthTokenStore.getInstance().getUsername();
             if (username != null) {
                 navbar_username.setText(username);
             }
         }
+
+        super.onPrepareOptionsMenu(menu);
     }
 
     @Override

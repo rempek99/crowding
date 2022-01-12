@@ -15,6 +15,7 @@ import lombok.Data;
 @Builder
 public class UserDetailsDto {
 
+    private String username;
     private String firstname;
     private String surname;
     private String gender;

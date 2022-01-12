@@ -1,5 +1,5 @@
 package pl.remplewicz.crowding.dto;/*
- * Copyright (c) 2021.
+ * Copyright (c) 2022.
  * All Rights Reserved.
  * Created by:
  * Name: Arkadiusz Remplewicz
@@ -17,7 +17,8 @@ import java.time.ZonedDateTime;
 
 @Getter
 @Builder
-public class CrowdingEventDto {
+public class CrowdingEventWithDistanceDto {
+
 
     private Long id;
     private String title;
@@ -29,4 +30,5 @@ public class CrowdingEventDto {
     private Integer slots;
     private Double latitude;
     private Double longitude;
+    private Double distance;
 }

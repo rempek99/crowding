@@ -1,8 +1,5 @@
 package pl.remplewicz.api;
 
-import java.io.IOException;
-
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -10,6 +7,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import pl.remplewicz.util.AuthTokenStore;
 import pl.remplewicz.util.CrowdingConstants;
 import pl.remplewicz.util.CustomObjectMapper;
+import pl.remplewicz.util.InformationBar;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
@@ -21,19 +19,20 @@ public class RetrofitInstance {
         if (api == null) {
             OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
-            httpClient.addInterceptor(new Interceptor() {
-                @Override
-                public Response intercept(Chain chain) throws IOException {
-                    String token = AuthTokenStore.getInstance().getToken();
-                    if(token != null) {
-                        Request newRequest = chain.request().newBuilder()
-                                .addHeader("Authorization", "Bearer " +
-                                        token)
-                                .build();
-                        return chain.proceed(newRequest);
-                    }
-                    return chain.proceed(chain.request());
+            httpClient.addInterceptor(chain -> {
+                String token = AuthTokenStore.getInstance().getToken();
+                if(token != null) {
+                    Request newRequest = chain.request().newBuilder()
+                            .addHeader("Authorization", "Bearer " +
+                                    token)
+                            .build();
+                    return chain.proceed(newRequest);
                 }
+                Response proceed = chain.proceed(chain.request());
+                if(proceed.code() == 500) {
+                    InformationBar.showInfo("ERROR");
+                }
+                return proceed;
             });
 
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();

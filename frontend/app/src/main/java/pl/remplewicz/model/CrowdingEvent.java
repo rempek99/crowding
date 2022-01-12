@@ -1,9 +1,10 @@
 package pl.remplewicz.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.google.gson.annotations.SerializedName;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.ZonedDateTime;
+import java.util.Locale;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CrowdingEvent {
 
+    private Long id;
 
     private String title;
 
@@ -33,4 +35,18 @@ public class CrowdingEvent {
     private Double latitude;
 
     private Double longitude;
+
+    private Double distance;
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(StringUtils.rightPad(title,25));
+        sb.append(System.lineSeparator());
+        sb.append(StringUtils.rightPad(participants.toString()+'/'+slots.toString(),10));
+        if(distance!=null) {
+            sb.append(StringUtils.rightPad("Distance:" + String.format(Locale.ROOT,"%.2f",distance), 15));
+        }
+        return sb.toString();
+    }
 }

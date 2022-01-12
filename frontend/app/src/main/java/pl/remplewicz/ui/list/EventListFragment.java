@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -15,18 +16,22 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import pl.remplewicz.R;
+import pl.remplewicz.model.CrowdingEvent;
+import pl.remplewicz.ui.events.EventDetailsFragment;
+import pl.remplewicz.util.AuthTokenStore;
+import pl.remplewicz.util.InformationBar;
+import pl.remplewicz.util.NavigationHelper;
 import pl.remplewicz.util.ResourcesProvider;
 
 public class EventListFragment extends Fragment {
 
     private EventListViewModel viewModel;
 
-    private ArrayAdapter<String> adapter;
+    private ArrayAdapter<CrowdingEvent> adapter;
     private ListView listView;
-    private List<String> list = new ArrayList<>();
+    private List<CrowdingEvent> list = new ArrayList<>();
 
 
     @Override
@@ -42,18 +47,32 @@ public class EventListFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
         viewModel.setResourcesProvider(new ResourcesProvider(getContext()));
         listView = view.findViewById(R.id.crowdingEventList);
-        adapter=new ArrayAdapter<String>(getContext(),
+        adapter=new ArrayAdapter<CrowdingEvent>(getContext(),
                 android.R.layout.simple_list_item_1,
                 list);
-        list.add("Tap Fetch to download data from database");
+//        list.add("Tap Fetch to download data from database");
         listView.setAdapter(adapter);
 
         viewModel.getEvents().observe(getViewLifecycleOwner(),events -> {
             if(events!=null) {
                 System.out.println(events.size());
                 list.clear();
-                list.addAll(events.stream().map(x -> x.getTitle() + "\t" + x.getParticipants() +" / " + x.getSlots()).collect(Collectors.toList()));
+                list.addAll(events);
+//                list.addAll(events.stream().map(x -> x.getTitle() + "\t" + x.getParticipants() +" / " + x.getSlots()).collect(Collectors.toList()));
                 adapter.notifyDataSetChanged();
+            }
+        });
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(AuthTokenStore.getInstance().getToken()== null){
+                    InformationBar.showInfo(getString(R.string.login_required));
+                    return;
+                }
+                CrowdingEvent itemAtPosition = (CrowdingEvent) parent.getItemAtPosition(position);
+                NavigationHelper.goTo(new EventDetailsFragment(itemAtPosition));
             }
         });
 

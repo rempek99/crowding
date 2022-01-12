@@ -10,12 +10,12 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import pl.remplewicz.R;
 import pl.remplewicz.api.RetrofitInstance;
 import pl.remplewicz.model.LoginCredentials;
 import pl.remplewicz.util.InformationBar;
+import pl.remplewicz.util.NavigationHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,7 +59,7 @@ public class RegisterFragment extends Fragment {
             public void onResponse(Call<LoginCredentials> call, Response<LoginCredentials> response) {
                 if(response.code() == 200) {
                     InformationBar.showInfo(getResources().getString(R.string.registered_successed));
-                    Navigation.findNavController(view).navigate(R.id.action_navigation_register_fragment_to_navigation_login_fragment);
+                    NavigationHelper.goTo(new LoginFragment());
                 }
                 if(response.code() == 409){
                     InformationBar.showInfo(getResources().getString(R.string.login_taken));
