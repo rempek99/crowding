@@ -20,6 +20,7 @@ public class EventException extends ResponseStatusException {
     private static final String NO_SLOTS = "No more slots free";
     private static final String ORGANIZER_AS_PARTICIPANT = "Event organizer can not be the participant";
     private static final String ALREADY_SIGNED = "You are already signed in event";
+    private static final String YOU_ARE_NOT_PARTICIPANT = "You are are not participant of the event";
 
     public static EventNoSlotsException createNoSlotsException() {
         return new EventNoSlotsException(NO_SLOTS);
@@ -36,6 +37,10 @@ public class EventException extends ResponseStatusException {
 
     public static Exception createAlreadySigned() {
         return new EventAlreadySignedException(ALREADY_SIGNED);
+    }
+
+    public static Exception createYouAreNotParticipantException() {
+        return new EventYouAreNotParticipantException(YOU_ARE_NOT_PARTICIPANT);
     }
 
     public static class EventAlreadySignedException extends EventException {
@@ -55,6 +60,13 @@ public class EventException extends ResponseStatusException {
     public static class EventOrganizerAsParticipantException extends EventException {
 
         public EventOrganizerAsParticipantException(String message) {
+            super(HttpStatus.CONFLICT, message);
+        }
+    }
+
+    public static class EventYouAreNotParticipantException extends EventException {
+
+        public EventYouAreNotParticipantException(String message) {
             super(HttpStatus.CONFLICT, message);
         }
     }

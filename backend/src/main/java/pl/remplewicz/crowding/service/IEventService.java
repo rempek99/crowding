@@ -26,4 +26,6 @@ public interface IEventService {
     CrowdingEvent signInToEvent(Long id, Principal participant) throws Exception;
 
     List<EventDistance> getAllNear(EventLocation location);
+
+    CrowdingEvent signOutFromEvent(Long id, Principal principal) throws Exception;
 }

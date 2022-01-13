@@ -15,9 +15,20 @@ import javax.persistence.*;
 @Entity
 @Getter
 public class UserInfo {
+    public UserInfo() {
+    }
+
+    public UserInfo(Long id,String firstname, String surname, Integer age, Gender gender, User user) {
+        this.id = id;
+        this.firstname = firstname;
+        this.surname = surname;
+        this.age = age;
+        this.gender = gender;
+        this.user = user;
+    }
 
     public enum Gender{
-        MALE, FEMALE, OTHER
+        MALE, FEMALE
     }
 
     @Id

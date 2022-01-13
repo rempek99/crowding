@@ -8,8 +8,10 @@ import pl.remplewicz.crowding.exception.DuplicationException;
 import pl.remplewicz.crowding.exception.NotFoundException;
 import pl.remplewicz.crowding.model.Role;
 import pl.remplewicz.crowding.model.User;
+import pl.remplewicz.crowding.model.UserInfo;
 import pl.remplewicz.crowding.repository.UserRepo;
 
+import javax.transaction.Transactional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
  */
 
 @Service
+@Transactional(Transactional.TxType.REQUIRES_NEW)
 public class UserService implements IUserService {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
@@ -71,6 +74,12 @@ public class UserService implements IUserService {
         userRepo.saveAndFlush(tester);
         tester.addAuthority(Role.ADMIN);
         return userRepo.save(tester);
+    }
+
+    @Override
+    public User setUserDetails(User caller, UserInfo userInfoFromDto) {
+        caller.setUserInfo(userInfoFromDto);
+        return userRepo.saveAndFlush(caller);
     }
 
     @Override

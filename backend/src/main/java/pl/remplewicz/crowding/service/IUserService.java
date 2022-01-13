@@ -3,6 +3,7 @@ package pl.remplewicz.crowding.service;
 import pl.remplewicz.crowding.exception.DuplicationException;
 import pl.remplewicz.crowding.model.Role;
 import pl.remplewicz.crowding.model.User;
+import pl.remplewicz.crowding.model.UserInfo;
 
 import java.util.Set;
 
@@ -29,4 +30,6 @@ public interface IUserService {
 
     //todo delete it later
     User test(String login);
+
+    User setUserDetails(User caller, UserInfo userInfoFromDto);
 }

@@ -66,6 +66,12 @@ public class EventController {
     public CrowdingEventDetailsDto signInToEvent(@PathVariable Long id, Principal principal) throws Exception {
         return CrowdingEventConverter.toDtoWithDetails(eventService.signInToEvent(id,principal));
     }
+    @RolesAllowed(Role.USER)
+    @PutMapping("api/events/signout/{id}")
+    public CrowdingEventDetailsDto signOutFromEvent(@PathVariable Long id, Principal principal) throws Exception {
+        return CrowdingEventConverter.toDtoWithDetails(eventService.signOutFromEvent(id,principal));
+    }
+
 
 
 }

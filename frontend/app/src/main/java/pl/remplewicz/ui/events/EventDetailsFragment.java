@@ -1,5 +1,7 @@
 package pl.remplewicz.ui.events;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -19,6 +21,7 @@ import pl.remplewicz.R;
 import pl.remplewicz.api.RetrofitInstance;
 import pl.remplewicz.model.CrowdingEvent;
 import pl.remplewicz.model.CrowdingEventDetails;
+import pl.remplewicz.util.AuthTokenStore;
 import pl.remplewicz.util.InformationBar;
 import pl.remplewicz.util.PrettyStringFormatter;
 import retrofit2.Call;
@@ -57,34 +60,79 @@ public class EventDetailsFragment extends Fragment {
         participantsLayout = view.findViewById(R.id.event_details_participants_layout);
         singInButton = view.findViewById(R.id.event_details_sign_button);
         singInButton.setOnClickListener(l -> {
-            RetrofitInstance.getApi().signInToEvent(event.getId()).enqueue(new Callback<CrowdingEventDetails>() {
-                @Override
-                public void onResponse(Call<CrowdingEventDetails> call, Response<CrowdingEventDetails> response) {
-                    if(response.code() == 200) {
-                        InformationBar.showInfo(getString(R.string.signed_in));
-                        fetchDetails();
-                    }
-                    if(response.code() == 409) {
-                        try {
-                            JSONObject json = new JSONObject(response.errorBody().string());
-                            InformationBar.showInfo((String) json.get("message"));
-                        } catch (Exception ex) {
-                            InformationBar.showInfo(getString(R.string.cannotSignIn));
+            new AlertDialog.Builder(requireContext())
+                    .setTitle(singInButton.getText())
+                    .setMessage(getString(R.string.are_you_sure))
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                        if(whichButton == DialogInterface.BUTTON_POSITIVE){
+                            if(singInButton.getText().equals(getString(R.string.action_sign_in_short))) {
+                                signInToEvent();
+                            } else {
+                                signOutEvent();
+                            }
                         }
-                    }
-                }
+                    })
+                    .setNegativeButton(android.R.string.no, null).show();
 
-                @Override
-                public void onFailure(Call<CrowdingEventDetails> call, Throwable t) {
-
-                }
-            });
         });
 
         fetchDetails();
 
 
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    private void signInToEvent() {
+        RetrofitInstance.getApi().signInToEvent(event.getId()).enqueue(new Callback<CrowdingEventDetails>() {
+            @Override
+            public void onResponse(Call<CrowdingEventDetails> call, Response<CrowdingEventDetails> response) {
+                if (response.code() == 200) {
+                    InformationBar.showInfo(getString(R.string.signed_in));
+                    fetchDetails();
+                }
+                if (response.code() == 409) {
+                    try {
+                        assert response.errorBody() != null;
+                        JSONObject json = new JSONObject(response.errorBody().string());
+                        InformationBar.showInfo((String) json.get("message"));
+                    } catch (Exception ex) {
+                        InformationBar.showInfo(getString(R.string.cannotSignIn));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CrowdingEventDetails> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void signOutEvent() {
+        RetrofitInstance.getApi().signOutFromEvent(event.getId()).enqueue(new Callback<CrowdingEventDetails>() {
+            @Override
+            public void onResponse(Call<CrowdingEventDetails> call, Response<CrowdingEventDetails> response) {
+                if (response.code() == 200) {
+                    InformationBar.showInfo(getString(R.string.signed_out));
+                    fetchDetails();
+                }
+                if (response.code() == 409) {
+                    try {
+                        assert response.errorBody() != null;
+                        JSONObject json = new JSONObject(response.errorBody().string());
+                        InformationBar.showInfo((String) json.get("message"));
+                    } catch (Exception ex) {
+                        InformationBar.showInfo(getString(R.string.cannotSignIn));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CrowdingEventDetails> call, Throwable t) {
+
+            }
+        });
     }
 
     private void fetchDetails() {
@@ -120,6 +168,14 @@ public class EventDetailsFragment extends Fragment {
             user.setText(participant.getUsername());
             participantsLayout.addView(user);
         });
+        if (eventDetails.getParticipants()
+                .stream()
+                .anyMatch(
+                        participant -> participant.getUsername().equals(AuthTokenStore.getInstance().getUsername()))) {
+            singInButton.setText(getString(R.string.action_sign_out));
+        } else{
+            singInButton.setText(getString(R.string.action_sign_in_short));
+        }
     }
 
 }

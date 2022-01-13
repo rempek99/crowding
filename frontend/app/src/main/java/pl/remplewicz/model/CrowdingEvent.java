@@ -41,11 +41,11 @@ public class CrowdingEvent {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(StringUtils.rightPad(title,25));
+        sb.append(StringUtils.rightPad(title,40));
         sb.append(System.lineSeparator());
-        sb.append(StringUtils.rightPad(participants.toString()+'/'+slots.toString(),10));
+        sb.append(StringUtils.rightPad(participants.toString()+'/'+slots.toString(),20));
         if(distance!=null) {
-            sb.append(StringUtils.rightPad("Distance:" + String.format(Locale.ROOT,"%.2f",distance), 15));
+            sb.append(StringUtils.rightPad("Distance:" + String.format(Locale.ROOT,"%.2f",distance), 20));
         }
         return sb.toString();
     }

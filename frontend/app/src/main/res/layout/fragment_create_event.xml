@@ -19,7 +19,8 @@
         android:textSize="15sp"
         android:hint="@string/event_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="Event Title" />
 
     <Button
         android:id="@+id/createEditDate"
@@ -27,10 +28,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
+        android:shadowDx="0"
+        android:shadowDy="0"
         android:inputType="none"
         android:hint="@string/event_date"
         android:minHeight="48dp"
         android:textSize="15sp"
+        android:padding="5dp"
+        android:background="@color/primary"
+        android:textAlignment="textStart"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createEditTitle" />
 

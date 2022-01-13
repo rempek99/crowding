@@ -14,10 +14,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserDetails {
 
+    public enum Gender{
+        MALE, FEMALE
+    }
+
 
     private String username;
     private String firstname;
     private String surname;
-    private String gender;
+    private Gender gender;
     private Integer age;
 }

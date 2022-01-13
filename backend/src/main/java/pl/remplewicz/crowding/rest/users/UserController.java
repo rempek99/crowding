@@ -43,7 +43,7 @@ public class UserController {
         User user = userService.findById(id);
         User caller = userService.findByUsername(principal.getName());
         if (user.getUsername().equals(principal.getName()) || caller.hasRole(Role.ADMIN)) {
-           return UserConverter.toDtoWithDetails(user);
+            return UserConverter.toDtoWithDetails(user);
         }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
@@ -52,11 +52,25 @@ public class UserController {
     @RolesAllowed(Role.USER)
     public UserDetailsDto getUserDetails(Principal principal) throws UserAccountException.UserNotFoundAccountException {
         User caller = userService.findByUsername(principal.getName());
-        // todo NPE if caller has not details
-        if(caller == null) {
+        if (caller == null) {
             throw UserAccountException.createUserNotFoundException();
         }
+        if (caller.getUserInfo() == null) {
+            return UserDetailsDto.builder().username(caller.getUsername()).build();
+        }
         return UserConverter.toDtoWithDetails(caller);
+    }
+
+    @PutMapping("details/set")
+    @RolesAllowed(Role.USER)
+    public UserDetailsDto setUserDetails(Principal principal, @RequestBody UserDetailsDto newDetails) throws UserAccountException.UserNotFoundAccountException {
+        User caller = userService.findByUsername(principal.getName());
+        if (caller == null) {
+            throw UserAccountException.createUserNotFoundException();
+        }
+        return UserConverter.toDtoWithDetails(
+                userService.setUserDetails(caller,UserConverter.createUserInfoFromDto(newDetails, caller))
+        );
     }
 
     @PutMapping("roles/activate/{id}/{role}")

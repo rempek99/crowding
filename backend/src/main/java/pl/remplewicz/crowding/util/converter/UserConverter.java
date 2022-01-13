@@ -52,4 +52,13 @@ public class UserConverter {
     public static Set<UserDetailsDto> toSetDtoWithDetails(Set<User> user) {
         return user.stream().map(UserConverter::toDtoWithDetails).collect(Collectors.toSet());
     }
+
+    public static UserInfo createUserInfoFromDto(UserDetailsDto newDetails, User user) {
+        Long id = null;
+        if (user.getUserInfo() != null) {
+            id = user.getUserInfo().getId();
+        }
+        return new UserInfo(id, newDetails.getFirstname(), newDetails.getSurname(), newDetails.getAge(),
+                UserInfo.Gender.valueOf(newDetails.getGender()), user);
+    }
 }

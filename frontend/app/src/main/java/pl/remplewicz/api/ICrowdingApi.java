@@ -37,9 +37,16 @@ public interface ICrowdingApi {
     @GET("/api/user/details")
     Call<UserDetails> getUserDetails();
 
+    @PUT("/api/user/details/set")
+    Call<UserDetails> setUserDetails(@Body UserDetails userDetails);
+
     @GET("api/events/{id}")
     Call<CrowdingEventDetails> getEventDetails(@Path("id") Long id);
 
     @PUT("api/events/sign/{id}")
     Call<CrowdingEventDetails> signInToEvent(@Path("id") Long id);
+
+    @PUT("api/events/signout/{id}")
+    Call<CrowdingEventDetails> signOutFromEvent(@Path("id") Long id);
+
 }

@@ -50,7 +50,6 @@ public class EventListFragment extends Fragment {
         adapter=new ArrayAdapter<CrowdingEvent>(getContext(),
                 android.R.layout.simple_list_item_1,
                 list);
-//        list.add("Tap Fetch to download data from database");
         listView.setAdapter(adapter);
 
         viewModel.getEvents().observe(getViewLifecycleOwner(),events -> {
@@ -58,7 +57,6 @@ public class EventListFragment extends Fragment {
                 System.out.println(events.size());
                 list.clear();
                 list.addAll(events);
-//                list.addAll(events.stream().map(x -> x.getTitle() + "\t" + x.getParticipants() +" / " + x.getSlots()).collect(Collectors.toList()));
                 adapter.notifyDataSetChanged();
             }
         });

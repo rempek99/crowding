@@ -15,16 +15,15 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.navigation.NavigationView;
 
 import pl.remplewicz.R;
-import pl.remplewicz.ui.user.UserProfileFragment;
 import pl.remplewicz.databinding.ActivityMainBinding;
-import pl.remplewicz.ui.user.LoginFragment;
 import pl.remplewicz.ui.events.CreateEventFragment;
 import pl.remplewicz.ui.home.HomeFragment;
 import pl.remplewicz.ui.list.EventListFragment;
+import pl.remplewicz.ui.user.LoginFragment;
+import pl.remplewicz.ui.user.UserProfileFragment;
 import pl.remplewicz.util.AuthTokenStore;
 import pl.remplewicz.util.CrowdingConstants;
 import pl.remplewicz.util.InformationBar;
@@ -61,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navbar_userProfileIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(AuthTokenStore.getInstance().getToken() == null) {
+                if (AuthTokenStore.getInstance().getToken() == null) {
                     InformationBar.showInfo(getString(R.string.login_required));
                     return;
                 }
@@ -97,10 +96,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void refreshMenu() {
-        if(menu==null){return;}
+        if (menu == null) {
+            return;
+        }
         MenuItem logout = menu.findItem(R.id.navigation_logout);
         MenuItem login = menu.findItem(R.id.navigation_login_fragment);
-        if(AuthTokenStore.getInstance().getToken() == null) {
+        if (AuthTokenStore.getInstance().getToken() == null) {
             logout.setEnabled(false);
             // todo Login button is not visible
             login.setEnabled(true);
@@ -127,6 +128,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 NavigationHelper.goTo(new LoginFragment());
                 break;
             case R.id.navigation_create_event_fragment:
+                if (AuthTokenStore.getInstance().getToken() == null) {
+                    InformationBar.showInfo(getString(R.string.login_required));
+                    return true;
+                }
                 NavigationHelper.goTo(new CreateEventFragment());
                 break;
             case R.id.navigation_event_list_fragment:

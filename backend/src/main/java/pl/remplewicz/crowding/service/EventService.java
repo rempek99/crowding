@@ -23,10 +23,12 @@ import pl.remplewicz.crowding.model.User;
 import pl.remplewicz.crowding.repository.CrowdingEventRepo;
 import pl.remplewicz.crowding.repository.UserRepo;
 
+import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.*;
 
 @Service
+@Transactional(Transactional.TxType.REQUIRES_NEW)
 public class EventService implements IEventService {
 
     private final CrowdingEventRepo eventRepository;
@@ -75,6 +77,22 @@ public class EventService implements IEventService {
                 throw EventException.createNoSlotsException();
             }
             event.getParticipants().add(user);
+            return eventRepository.saveAndFlush(event);
+        }
+    }
+
+    @Override
+    public CrowdingEvent signOutFromEvent(Long id, Principal principal) throws Exception {
+        User user =
+                userRepo.findByUsername(principal.getName()).orElseThrow(
+                        () -> NotFoundException.createUsernameNotFound(principal.getName())
+                );
+        synchronized (this) {
+            CrowdingEvent event = eventRepository.findById(id).orElseThrow(() -> NotFoundException.eventNotFound(id));
+            if (!event.getParticipants().contains(user)) {
+                throw EventException.createYouAreNotParticipantException();
+            }
+            event.getParticipants().remove(user);
             return eventRepository.saveAndFlush(event);
         }
     }

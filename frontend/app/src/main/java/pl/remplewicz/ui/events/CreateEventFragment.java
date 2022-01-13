@@ -32,6 +32,7 @@ import pl.remplewicz.api.RetrofitInstance;
 import pl.remplewicz.model.CrowdingEvent;
 import pl.remplewicz.util.InformationBar;
 import pl.remplewicz.util.NavigationHelper;
+import pl.remplewicz.util.PrettyStringFormatter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -99,7 +100,6 @@ public class CreateEventFragment extends Fragment {
             datetimePickerOpened = true;
             // Get Current Date
             final Calendar c = Calendar.getInstance();
-            final StringBuilder dateTimeTextBuilder = new StringBuilder();
             mYear = c.get(Calendar.YEAR);
             mMonth = c.get(Calendar.MONTH);
             mDay = c.get(Calendar.DAY_OF_MONTH);
@@ -111,11 +111,10 @@ public class CreateEventFragment extends Fragment {
                     new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                            dateTimeTextBuilder.append(hourOfDay + ":" + minute);
                             mHour = hourOfDay;
                             mMinute = minute;
-                            datePickerButton.setText(dateTimeTextBuilder.toString());
                             eventDateTime = ZonedDateTime.of(mYear, mMonth, mDay, mHour, mMinute, 0, 0, ZonedDateTime.now().getZone());
+                            datePickerButton.setText(PrettyStringFormatter.prettyDate(eventDateTime));
                             datetimePickerOpened = false;
                         }
                     }, mHour, mMinute, true);
@@ -127,7 +126,6 @@ public class CreateEventFragment extends Fragment {
                             mYear = year;
                             mMonth = monthOfYear + 1;
                             mDay = dayOfMonth;
-                            dateTimeTextBuilder.append(mDay + "-" + mMonth + "-" + mYear + " ");
                             timePickerDialog.show();
                         }
                     }, mYear, mMonth, mDay);
