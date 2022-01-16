@@ -24,9 +24,9 @@ public class PrettyStringFormatter {
     public static String prettyLocation(Double latitude, Double longitude) {
         StringBuilder sb = new StringBuilder();
         sb.append('(');
-        sb.append(latitude);
+        sb.append(String.format("%.2f",latitude));
         sb.append(';');
-        sb.append(longitude);
+        sb.append(String.format("%.2f",longitude));
         sb.append(')');
         return sb.toString();
     }

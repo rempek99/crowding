@@ -103,4 +103,7 @@
     <string name="users_list_fragment_tag">USERS_LIST_TAG</string>
     <string name="active">Active</string>
     <string name="show_on_map">Show on map</string>
+    <string name="percentage_reached">%1$s %% slots taken! Prepare to the event!</string>
+    <string name="percentage_not_reached">Only %1$s%% slots taken! We have to reach at least 75%% to get the event started.</string>
+    <string name="ascii_list_elem">"• %1$s"</string>
 </resources>

@@ -148,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.navigation_logout:
                 AuthTokenStore.getInstance().invalidateToken();
                 InformationBar.showInfo(getString(R.string.logged_out));
+                NavigationHelper.backToHomeFragment();
                 break;
             case R.id.navigation_my_events_framgent:
                 if (AuthTokenStore.getInstance().getToken() == null) {

@@ -39,7 +39,7 @@ public class EventDetailsFragment extends Fragment {
 
     private CrowdingEvent event;
     private CrowdingEventDetails eventDetails;
-    private TextView title, date, organizer, slots, location, description;
+    private TextView title, date, organizer, slots, location, description, participantsPercentage;
     private LinearLayout participantsLayout;
     private Button singInButton, showOnMapButton;
 
@@ -64,6 +64,7 @@ public class EventDetailsFragment extends Fragment {
         slots = view.findViewById(R.id.event_details_slots);
         location = view.findViewById(R.id.event_details_location);
         description = view.findViewById(R.id.event_details_description);
+        participantsPercentage = view.findViewById(R.id.event_details_participants_percentage);
         participantsLayout = view.findViewById(R.id.event_details_participants_layout);
         singInButton = view.findViewById(R.id.event_details_sign_button);
         showOnMapButton = view.findViewById(R.id.event_details_show_on_map_button);
@@ -89,7 +90,7 @@ public class EventDetailsFragment extends Fragment {
         });
         showOnMapButton.setOnClickListener(l -> {
             NavigationHelper.goTo(new HomeFragment(
-                    new LatLng(event.getLatitude(), event.getLongitude())),
+                            new LatLng(event.getLatitude(), event.getLongitude())),
                     getString(R.string.home_fragment_tag));
         });
 
@@ -178,13 +179,22 @@ public class EventDetailsFragment extends Fragment {
         slots.setText(String.format(getString(R.string.numberOfNumberPattern), eventDetails.getParticipants().size(), eventDetails.getSlots()));
         location.setText(PrettyStringFormatter.prettyLocation(eventDetails.getLatitude(), eventDetails.getLongitude()));
         description.setText(eventDetails.getDescription());
+        double percentage = eventDetails.getParticipants().size();
+        percentage = percentage / eventDetails.getSlots() * 100.0;
+        if (eventDetails.getEventDate().isBefore(ZonedDateTime.now())) {
+            participantsPercentage.setVisibility(View.GONE);
+        } else if (percentage >= 75.0) {
+            participantsPercentage.setText(String.format(getString(R.string.percentage_reached), String.format("%.0f", percentage)));
+        } else {
+            participantsPercentage.setText(String.format(getString(R.string.percentage_not_reached), String.format("%.0f", percentage)));
+        }
         if (eventDetails.getParticipants().size() > 0) {
             participantsLayout.removeAllViewsInLayout();
         }
         eventDetails.getParticipants().forEach(participant -> {
             TextView user = new TextView(getContext());
-            user.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-            user.setText(participant.getUsername());
+            user.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            user.setText(String.format(getString(R.string.ascii_list_elem), participant.getUsername()));
             user.setOnClickListener(l -> {
                 NavigationHelper.goTo(new UserProfileFragment(participant), getString(R.string.user_profile_fragment_tag));
             });
