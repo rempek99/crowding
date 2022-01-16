@@ -11,8 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import org.json.JSONObject;
+
 import java.util.Locale;
 
+import lombok.SneakyThrows;
 import pl.remplewicz.R;
 import pl.remplewicz.api.RetrofitInstance;
 import pl.remplewicz.model.UserDetails;
@@ -24,15 +27,25 @@ import retrofit2.Response;
 
 public class UserProfileFragment extends Fragment {
 
-    private UserDetails userDetails;
+    private UserDetails userDetails, preFetchUser;
     TextView username, firstname, surname, gender, age;
     Button editButton;
 
+    public UserProfileFragment() {
+    }
+
+    public UserProfileFragment(UserDetails preFetchUser) {
+        this.preFetchUser = preFetchUser;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        requireActivity().setTitle(getString(R.string.title_profile));
+        if(preFetchUser!=null) {
+            requireActivity().setTitle(String.format(getString(R.string.profile_of_pattern),preFetchUser.getUsername()));
+        } else {
+            requireActivity().setTitle(getString(R.string.title_profile));
+        }
         return inflater.inflate(R.layout.fragment_user_profile, container, false);
     }
 
@@ -47,27 +60,53 @@ public class UserProfileFragment extends Fragment {
         age = view.findViewById(R.id.user_profile_age);
         editButton = view.findViewById(R.id.user_profile_edit_button);
         editButton.setOnClickListener(l -> {
-            NavigationHelper.goTo(new EditUserProfileFragment(userDetails,this));
+            NavigationHelper.goTo(new EditUserProfileFragment(userDetails,this),getString(R.string.edit_profile_fragment_tag));
         });
 
-        RetrofitInstance.getApi().getUserDetails().enqueue(new Callback<UserDetails>() {
-            @Override
-            public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
-                if (response.code() == 200) {
-                    assert response.body() != null;
-                    updateData(response.body());
+        if(preFetchUser==null) {
+            RetrofitInstance.getApi().getUserDetails().enqueue(new Callback<UserDetails>() {
+                @Override
+                public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
+                    if (response.code() == 200) {
+                        assert response.body() != null;
+                        updateData(response.body());
+                    } else if (response.code() == 403) {
+                        InformationBar.showInfo(getString(R.string.login_required));
+                        NavigationHelper.backToHomeFragment();
+                    }
                 }
-                else if(response.code() == 403) {
-                    InformationBar.showInfo(getString(R.string.login_required));
-                    NavigationHelper.backToHomeFragment();
+
+                @Override
+                public void onFailure(Call<UserDetails> call, Throwable t) {
+
                 }
-            }
+            });
+        } else {
+            editButton.setVisibility(View.GONE);
+            RetrofitInstance.getApi().getUserDetails(preFetchUser.getUsername()).enqueue(new Callback<UserDetails>() {
+                @SneakyThrows
+                @Override
+                public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
+                    if (response.code() == 200) {
+                        assert response.body() != null;
+                        updateData(response.body());
+                    } else if (response.code() == 403) {
+                        InformationBar.showInfo(getString(R.string.login_required));
+                        NavigationHelper.backToHomeFragment();
+                    } else if (response.code() == 404) {
+                        assert response.errorBody() != null;
+                        JSONObject json = new JSONObject(response.errorBody().string());
+                        InformationBar.showInfo((String) json.get("message"));
+                        NavigationHelper.previousFragment();
+                    }
+                }
 
-            @Override
-            public void onFailure(Call<UserDetails> call, Throwable t) {
+                @Override
+                public void onFailure(Call<UserDetails> call, Throwable t) {
 
-            }
-        });
+                }
+            });
+        }
     }
 
     private void updateData(UserDetails userDetails) {

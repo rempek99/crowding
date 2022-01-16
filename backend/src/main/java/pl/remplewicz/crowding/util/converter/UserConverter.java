@@ -2,10 +2,13 @@ package pl.remplewicz.crowding.util.converter;
 
 import pl.remplewicz.crowding.dto.UserDetailsDto;
 import pl.remplewicz.crowding.dto.UserDto;
+import pl.remplewicz.crowding.dto.UserRolesDto;
+import pl.remplewicz.crowding.model.Role;
 import pl.remplewicz.crowding.model.User;
 import pl.remplewicz.crowding.model.UserInfo;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -60,5 +63,19 @@ public class UserConverter {
         }
         return new UserInfo(id, newDetails.getFirstname(), newDetails.getSurname(), newDetails.getAge(),
                 UserInfo.Gender.valueOf(newDetails.getGender()), user);
+    }
+
+    public static UserRolesDto toDtoWithRoles(User user) {
+        return UserRolesDto.builder()
+                .id(user.getId())
+                .active(user.isEnabled())
+                .username(user.getUsername())
+                .roles(user.getAuthorities().stream().filter(Role::isEnabled)
+                        .map(Role::getAuthority).collect(Collectors.toList()))
+                .build();
+    }
+
+    public static List<UserRolesDto> toDtoWithRolesList(List<User> users) {
+        return users.stream().map(UserConverter::toDtoWithRoles).collect(Collectors.toList());
     }
 }

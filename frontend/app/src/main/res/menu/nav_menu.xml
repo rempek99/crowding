@@ -10,8 +10,13 @@
 
     <item
         android:id="@+id/navigation_event_list_fragment"
-        android:icon="@drawable/ic_list_foreground"
+        android:icon="@drawable/ic_baseline_format_list_bulleted_24"
         android:title="@string/title_list" />
+
+    <item
+        android:id="@+id/navigation_my_events_framgent"
+        android:icon="@drawable/ic_baseline_favorite_24"
+        android:title="@string/my_events"/>
 
 
     <item
@@ -29,5 +34,10 @@
         android:id="@+id/navigation_logout"
         android:icon="@drawable/ic_baseline_keyboard_return_24"
         android:title="@string/prompt_logout" />
+
+    <item
+        android:id="@+id/navigation_users_list"
+        android:icon="@drawable/ic_baseline_people_24"
+        android:title="@string/users"/>
 
 </menu>

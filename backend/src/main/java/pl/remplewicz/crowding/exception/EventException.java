@@ -21,6 +21,8 @@ public class EventException extends ResponseStatusException {
     private static final String ORGANIZER_AS_PARTICIPANT = "Event organizer can not be the participant";
     private static final String ALREADY_SIGNED = "You are already signed in event";
     private static final String YOU_ARE_NOT_PARTICIPANT = "You are are not participant of the event";
+    private static final String EVENT_TOO_EARLY = "Event must be set on at least one hour since now";
+    private static final String EVNET_ENDED = "Event has been already ended";
 
     public static EventNoSlotsException createNoSlotsException() {
         return new EventNoSlotsException(NO_SLOTS);
@@ -41,6 +43,21 @@ public class EventException extends ResponseStatusException {
 
     public static Exception createYouAreNotParticipantException() {
         return new EventYouAreNotParticipantException(YOU_ARE_NOT_PARTICIPANT);
+    }
+
+    public static EventTooEarlyException createEventTooEarlyException() {
+        return new EventTooEarlyException(EVENT_TOO_EARLY);
+    }
+
+    public static EventEndedException createEventEnded() {
+        return new EventEndedException(EVNET_ENDED);
+    }
+
+    public static class EventEndedException extends EventException {
+
+        public EventEndedException(String message) {
+            super(HttpStatus.CONFLICT, message);
+        }
     }
 
     public static class EventAlreadySignedException extends EventException {
@@ -67,6 +84,13 @@ public class EventException extends ResponseStatusException {
     public static class EventYouAreNotParticipantException extends EventException {
 
         public EventYouAreNotParticipantException(String message) {
+            super(HttpStatus.CONFLICT, message);
+        }
+    }
+
+    public static class EventTooEarlyException extends EventException {
+
+        public EventTooEarlyException(String message) {
             super(HttpStatus.CONFLICT, message);
         }
     }

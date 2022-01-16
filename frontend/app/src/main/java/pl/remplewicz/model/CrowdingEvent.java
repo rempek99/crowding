@@ -45,7 +45,7 @@ public class CrowdingEvent {
         sb.append(System.lineSeparator());
         sb.append(StringUtils.rightPad(participants.toString()+'/'+slots.toString(),20));
         if(distance!=null) {
-            sb.append(StringUtils.rightPad("Distance:" + String.format(Locale.ROOT,"%.2f",distance), 20));
+            sb.append(StringUtils.rightPad("Distance: " + String.format(Locale.ROOT,"%.2f km",distance), 20));
         }
         return sb.toString();
     }

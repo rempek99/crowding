@@ -68,7 +68,7 @@ public class LoginFragment extends Fragment {
 
         regitsterNavBtn = view.findViewById(R.id.loginRegisterBtn);
         regitsterNavBtn.setOnClickListener(v ->
-                NavigationHelper.goTo(new RegisterFragment()));
+                NavigationHelper.goTo(new RegisterFragment(),getString(R.string.register_fragment_tag)));
 
         loginButton = view.findViewById(R.id.loginLoginBtn);
         loginButton.setOnClickListener(v ->
@@ -89,7 +89,9 @@ public class LoginFragment extends Fragment {
                     AuthTokenStore.getInstance().setToken(token);
                     InformationBar.showInfo(getResources().getString(R.string.login_successed));
                     if(fallbackFragment!=null){
-                        NavigationHelper.goTo(fallbackFragment);
+                        NavigationHelper.previousFragment();
+                        //todo checkit
+                        NavigationHelper.goTo(fallbackFragment,"");
                     } else {
                         NavigationHelper.backToHomeFragment();
                     }

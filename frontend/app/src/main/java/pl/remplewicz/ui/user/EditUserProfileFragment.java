@@ -107,8 +107,10 @@ public class EditUserProfileFragment extends Fragment {
             @Override
             public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
                 if(response.code() == 200) {
-                    InformationBar.showInfo(getString(R.string.eddited));
-                    NavigationHelper.goTo(parentFragment);
+                    InformationBar.showInfo(getString(R.string.edited));
+                    NavigationHelper.previousFragment();
+                    //todo check it
+//                    NavigationHelper.goTo(parentFragment,getString(R.string.user_profile_fragment_tag));
                 } else {
                     try {
                         assert response.errorBody() != null;

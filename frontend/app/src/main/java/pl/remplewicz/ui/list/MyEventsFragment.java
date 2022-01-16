@@ -25,35 +25,36 @@ import pl.remplewicz.util.InformationBar;
 import pl.remplewicz.util.NavigationHelper;
 import pl.remplewicz.util.ResourcesProvider;
 
-public class EventListFragment extends Fragment {
+public class MyEventsFragment extends Fragment {
+
 
     private EventListViewModel viewModel;
-
-    private ArrayAdapter<CrowdingEvent> adapter;
     private ListView listView;
+    private ArrayAdapter<CrowdingEvent> adapter;
     private List<CrowdingEvent> list = new ArrayList<>();
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        requireActivity().setTitle(getString(R.string.title_list));
-        return inflater.inflate(R.layout.fragment_event_list, container, false);
+        requireActivity().setTitle(getString(R.string.my_events));
+        return inflater.inflate(R.layout.fragment_my_events, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         viewModel = new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
         viewModel.setResourcesProvider(new ResourcesProvider(getContext()));
-        listView = view.findViewById(R.id.crowdingEventList);
-        adapter=new ArrayAdapter<CrowdingEvent>(getContext(),
+        listView = view.findViewById(R.id.my_events_list);
+        adapter = new ArrayAdapter<CrowdingEvent>(getContext(),
                 android.R.layout.simple_list_item_1,
                 list);
         listView.setAdapter(adapter);
 
-        viewModel.getEvents().observe(getViewLifecycleOwner(),events -> {
-            if(events!=null) {
+        viewModel.getUserEvents().observe(getViewLifecycleOwner(), events -> {
+            if (events != null) {
                 System.out.println(events.size());
                 list.clear();
                 list.addAll(events);
@@ -65,7 +66,7 @@ public class EventListFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(AuthTokenStore.getInstance().getToken()== null){
+                if (AuthTokenStore.getInstance().getToken() == null) {
                     InformationBar.showInfo(getString(R.string.login_required));
                     return;
                 }
@@ -74,12 +75,11 @@ public class EventListFragment extends Fragment {
             }
         });
 
+        viewModel.fetchUserEvents();
 
-
-
-        Button fetchButton = view.findViewById(R.id.testButton);
+        Button fetchButton = view.findViewById(R.id.my_events_fetch_button);
         fetchButton.setOnClickListener(v -> {
-            viewModel.fetchEvents();
+            viewModel.fetchUserEvents();
         });
     }
 }

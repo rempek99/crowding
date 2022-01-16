@@ -2,16 +2,21 @@ package pl.remplewicz.crowding.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.remplewicz.crowding.exception.DuplicationException;
 import pl.remplewicz.crowding.exception.NotFoundException;
+import pl.remplewicz.crowding.exception.UserAccountException;
 import pl.remplewicz.crowding.model.Role;
 import pl.remplewicz.crowding.model.User;
 import pl.remplewicz.crowding.model.UserInfo;
 import pl.remplewicz.crowding.repository.UserRepo;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -83,16 +88,50 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Set<Role> activateUserRole(Long id, String roleName) {
-        User user = findById(id);
-        user.addAuthority(roleName);
-        return userRepo.save(user).getAuthorities().stream().filter(Role::isEnabled).collect(Collectors.toSet());
+    public List<User> getAll() {
+        return userRepo.findByOrderByUsernameAsc();
     }
 
     @Override
-    public Set<Role> deactivateUserRole(Long id, String roleName) {
+    public Optional<User> getPrincipalByUsername(String username) {
+        Optional<User> user = userRepo.findByUsername(username);
+        if(user.isPresent()){
+            if(user.get().isEnabled() && (user.get().hasRole(Role.USER) || user.get().hasRole(Role.ADMIN))){
+                return user;
+            } else{
+                return Optional.empty();
+            }
+        }
+        return user;
+    }
+
+    @Override
+    public User changeUserEnabled(Long id, Boolean enabled, Principal principal) throws UserAccountException.UserForbiddenEditException {
         User user = findById(id);
+        if(user.equals(findByUsername(principal.getName()))){
+            throw UserAccountException.createForbiddenEditException();
+        }
+        user.setEnabled(enabled);
+        return userRepo.saveAndFlush(user);
+    }
+
+    @Override
+    public User activateUserRole(Long id, String roleName, Principal principal) throws UserAccountException.UserForbiddenEditException {
+        User user = findById(id);
+        if(user.equals(findByUsername(principal.getName()))){
+            throw UserAccountException.createForbiddenEditException();
+        }
+        user.addAuthority(roleName);
+        return userRepo.saveAndFlush(user);
+    }
+
+    @Override
+    public User deactivateUserRole(Long id, String roleName, Principal principal) throws UserAccountException.UserForbiddenEditException {
+        User user = findById(id);
+        if(user.equals(findByUsername(principal.getName()))){
+            throw UserAccountException.createForbiddenEditException();
+        }
         user.removeAuthority(roleName);
-        return userRepo.save(user).getAuthorities().stream().filter(Role::isEnabled).collect(Collectors.toSet());
+        return userRepo.saveAndFlush(user);
     }
 }

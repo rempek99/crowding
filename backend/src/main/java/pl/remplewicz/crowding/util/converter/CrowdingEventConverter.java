@@ -80,7 +80,25 @@ public class CrowdingEventConverter {
                 .build();
     }
 
+    public static CrowdingEventWithDistanceDto toDtoWithoutDistance(CrowdingEvent event) {
+        return CrowdingEventWithDistanceDto.builder()
+                .id(event.getId())
+                .title(event.getTitle())
+                .description(event.getDescription())
+                .eventDate(event.getEventDate())
+                .slots(event.getSlots())
+                .participants(event.getParticipants().size())
+                .longitude(event.getLocation().getLongitude())
+                .latitude(event.getLocation().getLatitude())
+                .distance(null)
+                .build();
+    }
+
     public static List<CrowdingEventWithDistanceDto> toDtoWithDistanceList(List<EventDistance> eventDistanceList) {
         return eventDistanceList.stream().map(CrowdingEventConverter::toDtoWithDistance).collect(Collectors.toList());
+    }
+
+    public static List<CrowdingEventWithDistanceDto> toDtoWithoutDistanceList(List<CrowdingEvent> eventList) {
+        return eventList.stream().map(CrowdingEventConverter::toDtoWithoutDistance).collect(Collectors.toList());
     }
 }

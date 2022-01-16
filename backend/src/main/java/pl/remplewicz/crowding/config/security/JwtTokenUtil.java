@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import pl.remplewicz.crowding.model.User;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import static java.lang.String.format;
@@ -26,6 +27,7 @@ import static java.lang.String.format;
 @Slf4j
 public class JwtTokenUtil {
 
+    private static final String ROLES_CLAIM = "roles";
     @Value("${jwt.secret}")
     private String jwtSecret;
     @Value("${jwt.issuer}")
@@ -34,10 +36,22 @@ public class JwtTokenUtil {
     private Long jwtExpirationTime;
 
     public String generateAccessToken(User user) {
+        StringBuilder rolesBuilder = new StringBuilder();
+        String roles = "";
+        user.getAuthorities().forEach(role -> {
+            if(role.isEnabled()) {
+                rolesBuilder.append(role.getAuthority());
+                rolesBuilder.append(',');
+            }
+        });
+        if(rolesBuilder.length()>0){
+            roles = rolesBuilder.substring(0,rolesBuilder.length()-1);
+        }
         return Jwts.builder()
                 .setSubject(format("%s", user.getUsername()))
                 .setIssuer(jwtIssuer)
                 .setIssuedAt(new Date())
+                .claim(ROLES_CLAIM, roles)
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationTime)) // 1 week
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();

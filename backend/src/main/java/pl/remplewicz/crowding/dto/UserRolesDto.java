@@ -17,6 +17,8 @@ import java.util.List;
 @Builder
 public class UserRolesDto {
 
+    private Long id;
     private String username;
+    private Boolean active;
     private List<String> roles;
 }

@@ -25,6 +25,8 @@ public class EventListViewModel extends ViewModel {
 
     private MutableLiveData<List<CrowdingEvent>> events;
 
+    private MutableLiveData<List<CrowdingEvent>> userEvents;
+
     private Location clientLocation;
 
     public void fetchEvents() {
@@ -38,7 +40,6 @@ public class EventListViewModel extends ViewModel {
             @Override
             public void onResponse(Call<List<CrowdingEvent>> call, Response<List<CrowdingEvent>> response) {
                 events.setValue(response.body());
-                InformationBar.showInfo(resourcesProvider.getString(R.string.sts_fetched));
             }
 
             @Override
@@ -56,8 +57,36 @@ public class EventListViewModel extends ViewModel {
     public LiveData<List<CrowdingEvent>> getEvents() {
         if (events == null) {
             events = new MutableLiveData<>();
-//            fetchEvents();
+            fetchEvents();
         }
         return events;
+    }
+
+    public LiveData<List<CrowdingEvent>> getUserEvents() {
+        if (userEvents == null) {
+            userEvents = new MutableLiveData<>();
+            fetchEvents();
+        }
+        return userEvents;
+    }
+
+    public void fetchUserEvents() {
+        Call<List<CrowdingEvent>> call;
+        if (clientLocation != null) {
+            call = RetrofitInstance.getApi().getUserNearEvents(clientLocation.getLatitude(), clientLocation.getLongitude());
+        } else {
+            call = RetrofitInstance.getApi().getUserEvents();
+        }
+        call.enqueue(new Callback<List<CrowdingEvent>>() {
+            @Override
+            public void onResponse(Call<List<CrowdingEvent>> call, Response<List<CrowdingEvent>> response) {
+                userEvents.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<CrowdingEvent>> call, Throwable t) {
+                InformationBar.showInfo(resourcesProvider.getString(R.string.sts_error));
+            }
+        });
     }
 }

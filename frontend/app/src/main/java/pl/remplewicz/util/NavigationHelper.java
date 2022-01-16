@@ -19,20 +19,28 @@ public class NavigationHelper {
     public static DrawerLayout drawerLayout;
 
     public static void backToHomeFragment() {
-        goTo(new HomeFragment());
+        goTo(new HomeFragment(), mainActivity.getString(R.string.home_fragment_tag));
     }
 
 
     public static void showLoginFragment(Fragment fragment) {
-        goTo(new LoginFragment(fragment));
+        goTo(new LoginFragment(fragment), mainActivity.getString(R.string.login_fragment_tag));
     }
 
-    public static void goTo(Fragment fragment) {
+    public static void goTo(Fragment fragment,String tag) {
 
         //todo check if given fragment is visible
-        mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, fragment.getTag()).commit();
+        mainActivity.getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment, tag)
+                .setReorderingAllowed(true)
+                .addToBackStack(tag)
+                .commit();
+//        mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, fragment.getTag()).commit();
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         }
+    }
+    public static void previousFragment() {
+        mainActivity.getSupportFragmentManager().popBackStack();
     }
 }

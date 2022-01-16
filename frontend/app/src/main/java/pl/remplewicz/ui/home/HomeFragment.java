@@ -59,7 +59,16 @@ public class HomeFragment extends Fragment {
     private AlertDialog detailsPopup;
     private boolean locationPermissionGranted;
     private Location lastKnownLocation;
-    private LatLng defaultLocation = new LatLng(52.76778751720479, 19.558075570858506);;
+    private LatLng defaultLocation = new LatLng(52.76778751720479, 19.558075570858506);
+    ;
+    private LatLng givenLocation;
+
+    public HomeFragment() {
+    }
+
+    public HomeFragment(LatLng givenLocation) {
+        this.givenLocation = givenLocation;
+    }
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 100;
 
@@ -94,7 +103,6 @@ public class HomeFragment extends Fragment {
     };
 
 
-
     private void createEventDetailDialog(CrowdingEvent crowdingEvent) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         final View detailsPopupView = getLayoutInflater().inflate(R.layout.crowding_event_details_popup, null);
@@ -111,7 +119,7 @@ public class HomeFragment extends Fragment {
                 InformationBar.showInfo(getString(R.string.login_required));
                 return;
             }
-            NavigationHelper.goTo(new EventDetailsFragment(crowdingEvent));
+            NavigationHelper.goTo(new EventDetailsFragment(crowdingEvent), getString(R.string.event_details_fragment_tag));
             detailsPopup.dismiss();
         });
         detailsPopup = builder.create();
@@ -127,10 +135,6 @@ public class HomeFragment extends Fragment {
         mapGoogle.clear();
         List<MarkerOptions> markerOptionsList = new ArrayList<>();
 
-        //EXAMPLE
-        LatLng mochowo = new LatLng(52.76778751720479, 19.558075570858506);
-        markerOptionsList.add(new MarkerOptions().position(mochowo).title("Marker in Mochowo"));
-        //EXAMPLE
 
         events.forEach(event -> {
                     MarkerOptions markerOptions = new MarkerOptions()
@@ -140,7 +144,9 @@ public class HomeFragment extends Fragment {
                     markerCrowdingEventMap.put(marker, event);
                 }
         );
-        mapGoogle.moveCamera(CameraUpdateFactory.newLatLngZoom(mochowo, 10));
+        if (givenLocation != null) {
+            mapGoogle.moveCamera(CameraUpdateFactory.newLatLngZoom(givenLocation, 10));
+        }
     }
 
 
@@ -204,7 +210,7 @@ public class HomeFragment extends Fragment {
                 lastKnownLocation = null;
                 getLocationPermission();
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
     }
@@ -227,86 +233,28 @@ public class HomeFragment extends Fragment {
                             lastKnownLocation = task.getResult();
                             if (lastKnownLocation != null) {
                                 viewModel.setClientLocation(lastKnownLocation);
-                                mapGoogle.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                        new LatLng(lastKnownLocation.getLatitude(),
-                                                lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                if (givenLocation == null) {
+                                    mapGoogle.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                            new LatLng(lastKnownLocation.getLatitude(),
+                                                    lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                }
                                 mapGoogle.setMyLocationEnabled(true);
                                 mapGoogle.getUiSettings().setMyLocationButtonEnabled(true);
                             }
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");
                             Log.e(TAG, "Exception: %s", task.getException());
-                            mapGoogle.moveCamera(CameraUpdateFactory
-                                    .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
+                            if (givenLocation == null) {
+                                mapGoogle.moveCamera(CameraUpdateFactory
+                                        .newLatLngZoom(defaultLocation, DEFAULT_ZOOM));
+                            }
                             mapGoogle.getUiSettings().setMyLocationButtonEnabled(false);
                         }
                     }
                 });
             }
-        } catch (SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage(), e);
         }
     }
-
-
-//
-//    private HomeViewModel homeViewModel;
-//    private GoogleMap mMap;
-//    private ActivityMapsBinding binding;
-//    private MapView mMapView;
-//
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-//        mMapView = (MapView) rootView.findViewById(R.id.mapView);
-//        mMapView.onCreate(savedInstanceState);
-//        mMapView.onResume();
-//        try {
-//            MapsInitializer.initialize(getActivity().getApplicationContext());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        mMapView.getMapAsync(new OnMapReadyCallback() {
-//            @Override
-//            public void onMapReady(GoogleMap googleMap) {
-//                mMap = googleMap;
-//
-//                // Add a marker in Sydney and move the camera
-//                LatLng mochowo = new LatLng(52.76778751720479, 19.558075570858506);
-////                BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_emoji_people_24);
-//                mMap.addMarker(new MarkerOptions()
-//                        .position(mochowo)
-//                        .icon(bitmapDescriptorFromVector(rootView.getContext(),R.drawable.ic_baseline_emoji_people_24))
-//                        .title("Marker in Mochowo"));
-//                mMap.moveCamera(CameraUpdateFactory.newLatLng(mochowo));
-//            }
-//        });
-//        return rootView;
-//    }
-//
-////
-////        String url = "http://google.com";
-////        RequestQueue queue = Volley.newRequestQueue(this);
-////        System.out.println(url);
-////        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
-////            @Override
-////            public void onResponse(String response) {
-////                System.out.println(response);
-////            }
-////        },null);
-////        queue.add(stringRequest);
-////        queue.start();
-//
-//
-//    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
-//        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-//        assert vectorDrawable != null;
-//        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-//        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-//        Canvas canvas = new Canvas(bitmap);
-//        vectorDrawable.draw(canvas);
-//        return BitmapDescriptorFactory.fromBitmap(bitmap);
-//    }
 }

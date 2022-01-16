@@ -20,10 +20,11 @@ import com.google.android.material.navigation.NavigationView;
 import pl.remplewicz.R;
 import pl.remplewicz.databinding.ActivityMainBinding;
 import pl.remplewicz.ui.events.CreateEventFragment;
-import pl.remplewicz.ui.home.HomeFragment;
 import pl.remplewicz.ui.list.EventListFragment;
+import pl.remplewicz.ui.list.MyEventsFragment;
 import pl.remplewicz.ui.user.LoginFragment;
 import pl.remplewicz.ui.user.UserProfileFragment;
+import pl.remplewicz.ui.user.UsersListFragment;
 import pl.remplewicz.util.AuthTokenStore;
 import pl.remplewicz.util.CrowdingConstants;
 import pl.remplewicz.util.InformationBar;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         NavigationHelper.setMainActivity(this);
-        InformationBar.currentView = getApplicationContext();
+        InformationBar.currentView = getBaseContext();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         toolbar = findViewById(R.id.main_toolbar);
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     InformationBar.showInfo(getString(R.string.login_required));
                     return;
                 }
-                NavigationHelper.goTo(new UserProfileFragment());
+                NavigationHelper.goTo(new UserProfileFragment(),getString(R.string.user_profile_fragment_tag));
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
@@ -101,6 +102,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         MenuItem logout = menu.findItem(R.id.navigation_logout);
         MenuItem login = menu.findItem(R.id.navigation_login_fragment);
+        MenuItem usersList = menu.findItem(R.id.navigation_users_list);
+        usersList.setVisible(false);
         if (AuthTokenStore.getInstance().getToken() == null) {
             logout.setEnabled(false);
             // todo Login button is not visible
@@ -111,7 +114,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             login.setEnabled(false);
             String username = AuthTokenStore.getInstance().getUsername();
             if (username != null) {
-                navbar_username.setText(username);
+                if(AuthTokenStore.getInstance().isAdmin()){
+                    navbar_username.setText(username + " (ADMIN)");
+                    usersList.setVisible(true);
+                } else {
+                    navbar_username.setText(username);
+                }
             }
         }
 
@@ -122,25 +130,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.navigation_home:
-                NavigationHelper.goTo(new HomeFragment());
+                NavigationHelper.backToHomeFragment();
                 break;
             case R.id.navigation_login_fragment:
-                NavigationHelper.goTo(new LoginFragment());
+                NavigationHelper.goTo(new LoginFragment(),getString(R.string.login_fragment_tag));
                 break;
             case R.id.navigation_create_event_fragment:
                 if (AuthTokenStore.getInstance().getToken() == null) {
                     InformationBar.showInfo(getString(R.string.login_required));
                     return true;
                 }
-                NavigationHelper.goTo(new CreateEventFragment());
+                NavigationHelper.goTo(new CreateEventFragment(),getString(R.string.create_event_fragment_tag));
                 break;
             case R.id.navigation_event_list_fragment:
-                NavigationHelper.goTo(new EventListFragment());
+                NavigationHelper.goTo(new EventListFragment(),getString(R.string.event_list_fragment_tag));
                 break;
             case R.id.navigation_logout:
                 AuthTokenStore.getInstance().invalidateToken();
+                InformationBar.showInfo(getString(R.string.logged_out));
                 break;
+            case R.id.navigation_my_events_framgent:
+                if (AuthTokenStore.getInstance().getToken() == null) {
+                    InformationBar.showInfo(getString(R.string.login_required));
+                    return true;
+                }
+                NavigationHelper.goTo(new MyEventsFragment(),getString(R.string.my_events_fragment_tag));
+                break;
+            case R.id.navigation_users_list:
+                if (AuthTokenStore.getInstance().getToken() == null) {
+                    InformationBar.showInfo(getString(R.string.login_required));
+                    return true;
+                }
+                if(!AuthTokenStore.getInstance().isAdmin()){
+                    InformationBar.showInfo(getString(R.string.forbidden));
+                    return true;
+                }
+                NavigationHelper.goTo(new UsersListFragment(),getString(R.string.users_list_fragment_tag));
         }
         return true;
     }
+
 }

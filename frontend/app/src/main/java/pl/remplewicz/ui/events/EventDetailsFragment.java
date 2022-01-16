@@ -15,14 +15,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONObject;
+
+import java.time.ZonedDateTime;
 
 import pl.remplewicz.R;
 import pl.remplewicz.api.RetrofitInstance;
 import pl.remplewicz.model.CrowdingEvent;
 import pl.remplewicz.model.CrowdingEventDetails;
+import pl.remplewicz.ui.home.HomeFragment;
+import pl.remplewicz.ui.user.UserProfileFragment;
 import pl.remplewicz.util.AuthTokenStore;
 import pl.remplewicz.util.InformationBar;
+import pl.remplewicz.util.NavigationHelper;
 import pl.remplewicz.util.PrettyStringFormatter;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,7 +41,7 @@ public class EventDetailsFragment extends Fragment {
     private CrowdingEventDetails eventDetails;
     private TextView title, date, organizer, slots, location, description;
     private LinearLayout participantsLayout;
-    private Button singInButton;
+    private Button singInButton, showOnMapButton;
 
 
     public EventDetailsFragment(CrowdingEvent event) {
@@ -59,14 +66,18 @@ public class EventDetailsFragment extends Fragment {
         description = view.findViewById(R.id.event_details_description);
         participantsLayout = view.findViewById(R.id.event_details_participants_layout);
         singInButton = view.findViewById(R.id.event_details_sign_button);
+        showOnMapButton = view.findViewById(R.id.event_details_show_on_map_button);
+        if (event.getEventDate().isBefore(ZonedDateTime.now())) {
+            singInButton.setEnabled(false);
+        }
         singInButton.setOnClickListener(l -> {
             new AlertDialog.Builder(requireContext())
                     .setTitle(singInButton.getText())
                     .setMessage(getString(R.string.are_you_sure))
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
-                        if(whichButton == DialogInterface.BUTTON_POSITIVE){
-                            if(singInButton.getText().equals(getString(R.string.action_sign_in_short))) {
+                        if (whichButton == DialogInterface.BUTTON_POSITIVE) {
+                            if (singInButton.getText().equals(getString(R.string.action_sign_in_short))) {
                                 signInToEvent();
                             } else {
                                 signOutEvent();
@@ -75,6 +86,11 @@ public class EventDetailsFragment extends Fragment {
                     })
                     .setNegativeButton(android.R.string.no, null).show();
 
+        });
+        showOnMapButton.setOnClickListener(l -> {
+            NavigationHelper.goTo(new HomeFragment(
+                    new LatLng(event.getLatitude(), event.getLongitude())),
+                    getString(R.string.home_fragment_tag));
         });
 
         fetchDetails();
@@ -156,6 +172,9 @@ public class EventDetailsFragment extends Fragment {
         title.setText(eventDetails.getTitle());
         date.setText(PrettyStringFormatter.prettyDate(eventDetails.getEventDate()));
         organizer.setText(eventDetails.getOrganizer().getUsername());
+        organizer.setOnClickListener(l -> {
+            NavigationHelper.goTo(new UserProfileFragment(eventDetails.getOrganizer()), getString(R.string.user_profile_fragment_tag));
+        });
         slots.setText(String.format(getString(R.string.numberOfNumberPattern), eventDetails.getParticipants().size(), eventDetails.getSlots()));
         location.setText(PrettyStringFormatter.prettyLocation(eventDetails.getLatitude(), eventDetails.getLongitude()));
         description.setText(eventDetails.getDescription());
@@ -166,6 +185,9 @@ public class EventDetailsFragment extends Fragment {
             TextView user = new TextView(getContext());
             user.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
             user.setText(participant.getUsername());
+            user.setOnClickListener(l -> {
+                NavigationHelper.goTo(new UserProfileFragment(participant), getString(R.string.user_profile_fragment_tag));
+            });
             participantsLayout.addView(user);
         });
         if (eventDetails.getParticipants()
@@ -173,7 +195,7 @@ public class EventDetailsFragment extends Fragment {
                 .anyMatch(
                         participant -> participant.getUsername().equals(AuthTokenStore.getInstance().getUsername()))) {
             singInButton.setText(getString(R.string.action_sign_out));
-        } else{
+        } else {
             singInButton.setText(getString(R.string.action_sign_in_short));
         }
     }

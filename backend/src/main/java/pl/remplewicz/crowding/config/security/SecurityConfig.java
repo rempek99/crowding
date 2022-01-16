@@ -15,6 +15,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import pl.remplewicz.crowding.model.Role;
+import pl.remplewicz.crowding.model.User;
 import pl.remplewicz.crowding.repository.UserRepo;
 
 import javax.servlet.http.HttpServletResponse;
@@ -50,13 +52,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(username -> userRepo
-                .findByUsername(username)
-                .orElseThrow(
-                        () -> new UsernameNotFoundException(
-                                format("User: %s, not found", username)
-                        )
-                ));
+        auth.userDetailsService(username -> {
+            User user = userRepo
+                    .findByUsername(username)
+                    .orElseThrow(
+                            () -> new UsernameNotFoundException(
+                                    format("User: %s, not found", username)
+                            )
+                    );
+            if (user.isEnabled() && (user.hasRole(Role.USER) || user.hasRole(Role.ADMIN))) {
+                return user;
+            } else {
+                throw new UsernameNotFoundException(
+                        format("User: %s, not found", username));
+            }
+        });
     }
 
     @Bean

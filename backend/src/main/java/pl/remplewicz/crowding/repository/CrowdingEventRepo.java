@@ -12,6 +12,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import pl.remplewicz.crowding.model.CrowdingEvent;
 
+import java.time.ZonedDateTime;
+import java.util.List;
+
 @Repository
 public interface CrowdingEventRepo extends JpaRepository<CrowdingEvent, Long> {
+
+    List<CrowdingEvent> findAllByEventDateIsAfter(ZonedDateTime date);
+
 }

@@ -83,5 +83,24 @@
     <string name="gender">Gender</string>
     <string name="age">Age</string>
     <string name="new_user_details">New User Details</string>
-    <string name="eddited">Eddited</string>
+    <string name="edited">Edited</string>
+    <string name="my_events">My events</string>
+    <string name="login_fragment_tag">LOGIN_TAG</string>
+    <string name="home_fragment_tag">HOME_TAG</string>
+    <string name="user_profile_fragment_tag">USER_PROFILE_TAG</string>
+    <string name="create_event_fragment_tag">CREATE_EVENT_TAG</string>
+    <string name="event_list_fragment_tag">EVENT_LIST_TAG</string>
+    <string name="my_events_fragment_tag">MY_EVENTS_TAG</string>
+    <string name="event_details_fragment_tag">EVENT_DETAILS_TAG</string>
+    <string name="register_fragment_tag">REGISTER_TAG</string>
+    <string name="edit_profile_fragment_tag">EDIT_PROFILE_TAG</string>
+    <string name="users">Users</string>
+    <string name="profile_of_pattern">%1$s\'s Profile</string>
+    <string name="username">Username</string>
+    <string name="role_user">user</string>
+    <string name="role_admin">admin</string>
+    <string name="forbidden">Forbidden</string>
+    <string name="users_list_fragment_tag">USERS_LIST_TAG</string>
+    <string name="active">Active</string>
+    <string name="show_on_map">Show on map</string>
 </resources>

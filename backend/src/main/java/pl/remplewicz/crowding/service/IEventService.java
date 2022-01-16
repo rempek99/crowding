@@ -27,5 +27,11 @@ public interface IEventService {
 
     List<EventDistance> getAllNear(EventLocation location);
 
+    List<EventDistance> getAllNearUserEvents(EventLocation location, Principal principal);
+
+    List<CrowdingEvent> getAllUserEvents(Principal principal);
+
     CrowdingEvent signOutFromEvent(Long id, Principal principal) throws Exception;
+
+    List<CrowdingEvent> getAllFutureEvents();
 }

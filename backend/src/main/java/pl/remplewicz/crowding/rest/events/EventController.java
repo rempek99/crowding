@@ -37,41 +37,56 @@ public class EventController {
     @PermitAll
     @GetMapping("api/public/events")
     public List<CrowdingEventDto> getAllEvents() {
-        return CrowdingEventConverter.toDtoList(eventService.getAll());
+        return CrowdingEventConverter.toDtoList(eventService.getAllFutureEvents());
     }
 
     @PermitAll
     @GetMapping("api/public/events/nearest/{latitude}/{longitude}")
     public List<CrowdingEventWithDistanceDto> getNearEvents(@PathVariable Double latitude,
                                                             @PathVariable Double longitude) {
-        EventLocation location = new EventLocation(null,latitude,longitude);
+        EventLocation location = new EventLocation(null, latitude, longitude);
         return CrowdingEventConverter.toDtoWithDistanceList(eventService.getAllNear(location));
     }
 
-    @RolesAllowed(Role.USER)
+    @RolesAllowed({Role.USER, Role.ADMIN})
+    @GetMapping("api/events/myevents/{latitude}/{longitude}")
+    public List<CrowdingEventWithDistanceDto> getMyNearEvents(@PathVariable Double latitude,
+                                                              @PathVariable Double longitude, Principal principal) {
+        EventLocation location = new EventLocation(null, latitude, longitude);
+        return CrowdingEventConverter.toDtoWithDistanceList(eventService.getAllNearUserEvents(location, principal));
+
+    }
+
+    @RolesAllowed({Role.USER, Role.ADMIN})
+    @GetMapping("api/events/myevents")
+    public List<CrowdingEventWithDistanceDto> getMyEvents(Principal principal) {
+        return CrowdingEventConverter.toDtoWithoutDistanceList(eventService.getAllUserEvents(principal));
+    }
+
+    @RolesAllowed({Role.USER, Role.ADMIN})
     @GetMapping("api/events/{id}")
     public CrowdingEventDetailsDto getEvent(@PathVariable Long id) throws Exception {
         return CrowdingEventConverter.toDtoWithDetails(eventService.get(id));
     }
 
-    @RolesAllowed(Role.USER)
+    @RolesAllowed({Role.USER, Role.ADMIN})
     @PostMapping("api/events/create")
     public CrowdingEventDto createEvent(@RequestBody CrowdingEventDto eventDto, Principal principal) throws Exception {
         CrowdingEvent event = CrowdingEventConverter.createEntityFromDto(eventDto);
         return CrowdingEventConverter.toDto(eventService.create(event, principal));
     }
 
-    @RolesAllowed(Role.USER)
+    @RolesAllowed({Role.USER, Role.ADMIN})
     @PutMapping("api/events/sign/{id}")
     public CrowdingEventDetailsDto signInToEvent(@PathVariable Long id, Principal principal) throws Exception {
-        return CrowdingEventConverter.toDtoWithDetails(eventService.signInToEvent(id,principal));
-    }
-    @RolesAllowed(Role.USER)
-    @PutMapping("api/events/signout/{id}")
-    public CrowdingEventDetailsDto signOutFromEvent(@PathVariable Long id, Principal principal) throws Exception {
-        return CrowdingEventConverter.toDtoWithDetails(eventService.signOutFromEvent(id,principal));
+        return CrowdingEventConverter.toDtoWithDetails(eventService.signInToEvent(id, principal));
     }
 
+    @RolesAllowed({Role.USER, Role.ADMIN})
+    @PutMapping("api/events/signout/{id}")
+    public CrowdingEventDetailsDto signOutFromEvent(@PathVariable Long id, Principal principal) throws Exception {
+        return CrowdingEventConverter.toDtoWithDetails(eventService.signOutFromEvent(id, principal));
+    }
 
 
 }

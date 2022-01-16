@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Base64;
 
 public class AuthTokenStore {
@@ -12,6 +13,8 @@ public class AuthTokenStore {
     private AuthTokenStore() {
     }
 
+    public static String ROLE_ADMIN = "ADMIN";
+    public static String ROLE_USER = "USER";
 
     private static AuthTokenStore instance;
 
@@ -64,6 +67,22 @@ public class AuthTokenStore {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public String[] getRoles() {
+        byte[] bytes = Base64.getDecoder().decode(token.split("\\.")[1]);
+        String string = new String(bytes, StandardCharsets.UTF_8);
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(string);
+            return ((String) jsonObject.get("roles")).split(",");
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public boolean isAdmin() {
+       return Arrays.stream(getRoles()).anyMatch(r -> r.equals(AuthTokenStore.ROLE_ADMIN));
     }
 
     public void addPropertyChangeListener(PropertyChangeListener l) {
