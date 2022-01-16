@@ -31,4 +31,5 @@ public class CrowdingEventWithDistanceDto {
     private Double latitude;
     private Double longitude;
     private Double distance;
+    private Integer version;
 }

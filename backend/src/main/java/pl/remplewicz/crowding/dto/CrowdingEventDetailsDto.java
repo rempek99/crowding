@@ -30,4 +30,5 @@ public class CrowdingEventDetailsDto {
     private Double longitude;
     private UserDetailsDto organizer;
     private Set<UserDetailsDto> participants;
+    private Integer version;
 }

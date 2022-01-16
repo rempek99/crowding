@@ -9,14 +9,17 @@ package pl.remplewicz.crowding.rest.events;/*
  */
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.*;
 import pl.remplewicz.crowding.dto.CrowdingEventDetailsDto;
 import pl.remplewicz.crowding.dto.CrowdingEventDto;
 import pl.remplewicz.crowding.dto.CrowdingEventWithDistanceDto;
+import pl.remplewicz.crowding.exception.OptimisticLockExceptionWrapper;
 import pl.remplewicz.crowding.model.CrowdingEvent;
 import pl.remplewicz.crowding.model.EventLocation;
 import pl.remplewicz.crowding.model.Role;
 import pl.remplewicz.crowding.service.IEventService;
+import pl.remplewicz.crowding.util.RetryingJob;
 import pl.remplewicz.crowding.util.converter.CrowdingEventConverter;
 
 import javax.annotation.security.PermitAll;
@@ -28,6 +31,7 @@ import java.util.List;
 public class EventController {
 
     private final IEventService eventService;
+    private final static int RETRIES_COUNTER_LIMIT = 2;
 
     @Autowired
     public EventController(IEventService eventService) {
@@ -79,13 +83,47 @@ public class EventController {
     @RolesAllowed({Role.USER, Role.ADMIN})
     @PutMapping("api/events/sign/{id}")
     public CrowdingEventDetailsDto signInToEvent(@PathVariable Long id, Principal principal) throws Exception {
-        return CrowdingEventConverter.toDtoWithDetails(eventService.signInToEvent(id, principal));
+        CrowdingEvent jobResult = null;
+        RetryingJob<CrowdingEvent> job = new RetryingJob<CrowdingEvent>() {
+            @Override
+            public CrowdingEvent runJob() throws Exception {
+                return eventService.signInToEvent(id, principal);
+            }
+        };
+        for (int i = 0; i <= RETRIES_COUNTER_LIMIT; i++) {
+            try {
+                jobResult = job.runJob();
+                break;
+            } catch (ObjectOptimisticLockingFailureException ex) {
+                if (i == RETRIES_COUNTER_LIMIT) {
+                    throw new OptimisticLockExceptionWrapper();
+                }
+            }
+        }
+        return CrowdingEventConverter.toDtoWithDetails(jobResult);
     }
 
     @RolesAllowed({Role.USER, Role.ADMIN})
     @PutMapping("api/events/signout/{id}")
     public CrowdingEventDetailsDto signOutFromEvent(@PathVariable Long id, Principal principal) throws Exception {
-        return CrowdingEventConverter.toDtoWithDetails(eventService.signOutFromEvent(id, principal));
+        CrowdingEvent jobResult = null;
+        RetryingJob<CrowdingEvent> job = new RetryingJob<CrowdingEvent>() {
+            @Override
+            public CrowdingEvent runJob() throws Exception {
+                return eventService.signOutFromEvent(id, principal);
+            }
+        };
+        for (int i = 0; i <= RETRIES_COUNTER_LIMIT; i++) {
+            try {
+                jobResult = job.runJob();
+                break;
+            } catch (ObjectOptimisticLockingFailureException ex) {
+                if (i == RETRIES_COUNTER_LIMIT) {
+                    throw new OptimisticLockExceptionWrapper();
+                }
+            }
+        }
+        return CrowdingEventConverter.toDtoWithDetails(jobResult);
     }
 
 

@@ -35,6 +35,7 @@ public class CrowdingEventConverter {
                 .participants(crowdingEvent.getParticipants().size())
                 .longitude(crowdingEvent.getLocation().getLongitude())
                 .latitude(crowdingEvent.getLocation().getLatitude())
+                .version(crowdingEvent.getVersion())
                 .build();
     }
 
@@ -47,7 +48,7 @@ public class CrowdingEventConverter {
     public static CrowdingEvent createEntityFromDto(CrowdingEventDto eventDto) {
         return new CrowdingEvent(null, eventDto.getEventDate(), eventDto.getTitle(), eventDto.getDescription(),
                 eventDto.getSlots(), new EventLocation(null, eventDto.getLatitude(), eventDto.getLongitude()),
-                null, Collections.emptySet());
+                null, Collections.emptySet(),eventDto.getVersion());
     }
 
     public static CrowdingEventDetailsDto toDtoWithDetails(CrowdingEvent crowdingEvent) {
@@ -61,6 +62,7 @@ public class CrowdingEventConverter {
                 .latitude(crowdingEvent.getLocation().getLatitude())
                 .longitude(crowdingEvent.getLocation().getLongitude())
                 .organizer(UserConverter.toDtoWithDetails(crowdingEvent.getOrganizer()))
+                .version(crowdingEvent.getVersion())
                 .build();
 
     }
@@ -77,6 +79,7 @@ public class CrowdingEventConverter {
                 .longitude(crowdingEvent.getLocation().getLongitude())
                 .latitude(crowdingEvent.getLocation().getLatitude())
                 .distance(eventDistance.getDistance())
+                .version(crowdingEvent.getVersion())
                 .build();
     }
 
@@ -91,6 +94,7 @@ public class CrowdingEventConverter {
                 .longitude(event.getLocation().getLongitude())
                 .latitude(event.getLocation().getLatitude())
                 .distance(null)
+                .version(event.getVersion())
                 .build();
     }
 

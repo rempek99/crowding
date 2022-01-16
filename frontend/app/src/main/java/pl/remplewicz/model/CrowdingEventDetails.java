@@ -27,4 +27,5 @@ public class CrowdingEventDetails {
     private UserDetails organizer;
     private Set<UserDetails> participants;
     private Double distance;
+    private Integer version;
 }

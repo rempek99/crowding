@@ -10,6 +10,7 @@ package pl.remplewicz.crowding.service;/*
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import pl.remplewicz.crowding.exception.DuplicationException;
 import pl.remplewicz.crowding.exception.EventException;
@@ -73,23 +74,23 @@ public class EventService implements IEventService {
                 userRepo.findByUsername(participant.getName()).orElseThrow(
                         () -> NotFoundException.createUsernameNotFound(participant.getName())
                 );
-        synchronized (this) {
-            CrowdingEvent event = eventRepository.findById(id).orElseThrow(() -> NotFoundException.eventNotFound(id));
-            if (event.getParticipants().contains(user)) {
-                throw EventException.createAlreadySigned();
-            }
-            if (event.getOrganizer().equals(user)) {
-                throw EventException.createOrganizerAsParticipantException();
-            }
-            if (event.getParticipants().size() >= event.getSlots()) {
-                throw EventException.createNoSlotsException();
-            }
-            if (event.getEventDate().isBefore(ZonedDateTime.now())) {
-                throw EventException.createEventEnded();
-            }
-            event.getParticipants().add(user);
-            return eventRepository.saveAndFlush(event);
+        CrowdingEvent event = eventRepository.getById(id);
+//            CrowdingEvent event = eventRepository.findById(id).orElseThrow(() -> NotFoundException.eventNotFound(id));
+        if (event.getParticipants().contains(user)) {
+            throw EventException.createAlreadySigned();
         }
+        if (event.getOrganizer().equals(user)) {
+            throw EventException.createOrganizerAsParticipantException();
+        }
+        if (event.getParticipants().size() >= event.getSlots()) {
+            throw EventException.createNoSlotsException();
+        }
+        if (event.getEventDate().isBefore(ZonedDateTime.now())) {
+            throw EventException.createEventEnded();
+        }
+        event.getParticipants().add(user);
+        return eventRepository.saveAndFlush(event);
+
     }
 
     @Override
@@ -98,17 +99,15 @@ public class EventService implements IEventService {
                 userRepo.findByUsername(principal.getName()).orElseThrow(
                         () -> NotFoundException.createUsernameNotFound(principal.getName())
                 );
-        synchronized (this) {
-            CrowdingEvent event = eventRepository.findById(id).orElseThrow(() -> NotFoundException.eventNotFound(id));
-            if (!event.getParticipants().contains(user)) {
-                throw EventException.createYouAreNotParticipantException();
-            }
-            if (event.getEventDate().isBefore(ZonedDateTime.now())) {
-                throw EventException.createEventEnded();
-            }
-            event.getParticipants().remove(user);
-            return eventRepository.saveAndFlush(event);
+        CrowdingEvent event = eventRepository.findById(id).orElseThrow(() -> NotFoundException.eventNotFound(id));
+        if (!event.getParticipants().contains(user)) {
+            throw EventException.createYouAreNotParticipantException();
         }
+        if (event.getEventDate().isBefore(ZonedDateTime.now())) {
+            throw EventException.createEventEnded();
+        }
+        event.getParticipants().remove(user);
+        return eventRepository.saveAndFlush(event);
     }
 
     @Override

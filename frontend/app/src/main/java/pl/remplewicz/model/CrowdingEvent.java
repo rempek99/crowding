@@ -38,6 +38,8 @@ public class CrowdingEvent {
 
     private Double distance;
 
+    private Integer version;
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

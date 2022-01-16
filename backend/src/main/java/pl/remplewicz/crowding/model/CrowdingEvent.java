@@ -57,4 +57,7 @@ public class CrowdingEvent {
     // todo defining key on userid
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<User> participants = new HashSet<>();
+
+    @Version
+    private Integer version;
 }

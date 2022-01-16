@@ -29,4 +29,5 @@ public class CrowdingEventDto {
     private Integer slots;
     private Double latitude;
     private Double longitude;
+    private Integer version;
 }

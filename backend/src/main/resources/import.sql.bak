@@ -42,11 +42,11 @@ INSERT INTO public.event_location (id, latitude, longitude) VALUES (-4, 55.76, 2
 INSERT INTO public.event_location (id, latitude, longitude) VALUES (-5, 56.76, 23.55);
 
 -- CROWDING EVENTS
-INSERT INTO public.crowding_event(id, description, slots, event_date, title, location_id, organizer_id) VALUES (-1, 'Event w Mochowie', 5, '2021-12-12 12:00:00+01', 'Test event', -1, -2);
-INSERT INTO public.crowding_event(id, description, slots, event_date, title, location_id, organizer_id) VALUES (-2, 'bla bla bla', 5, '2022-12-13 13:00:00+01', 'Test event #2', -2, -1);
-INSERT INTO public.crowding_event(id, description, slots, event_date, title, location_id, organizer_id) VALUES (-3, 'bla bla bla', 5, '2021-12-14 14:00:00+01', 'Test event #3', -3, -3);
-INSERT INTO public.crowding_event(id, description, slots, event_date, title, location_id, organizer_id) VALUES (-4, 'bla bla bla', 5, '2021-12-15 15:00:00+01', 'Test event #4', -4, -4);
-INSERT INTO public.crowding_event(id, description, slots, event_date, title, location_id, organizer_id) VALUES (-5, 'bla bla bla', 5, '2021-12-16 16:00:00+01', 'Test event #5', -1, -5);
+INSERT INTO public.crowding_event(id, description, slots, event_date, title, location_id, organizer_id, version) VALUES (-1, 'Event w Mochowie', 5, '2021-12-12 12:00:00+01', 'Test event', -1, -2, 1);
+INSERT INTO public.crowding_event(id, description, slots, event_date, title, location_id, organizer_id, version) VALUES (-2, 'bla bla bla', 5, '2022-02-13 13:00:00+01', 'Test event #2', -2, -1, 1);
+INSERT INTO public.crowding_event(id, description, slots, event_date, title, location_id, organizer_id, version) VALUES (-3, 'bla bla bla', 5, '2022-04-14 14:00:00+01', 'Test event #3', -3, -3, 1);
+INSERT INTO public.crowding_event(id, description, slots, event_date, title, location_id, organizer_id, version) VALUES (-4, 'bla bla bla', 5, '2022-01-15 15:00:00+01', 'Test event #4', -4, -4, 1);
+INSERT INTO public.crowding_event(id, description, slots, event_date, title, location_id, organizer_id, version) VALUES (-5, 'bla bla bla', 5, '2021-12-16 16:00:00+01', 'Test event #5', -1, -5, 1);
 
 -- CROWDING EVENTS PARTICIPANTS
 INSERT INTO public.crowding_event_participants(crowding_event_id, participants_id) VALUES (-1, -3);
