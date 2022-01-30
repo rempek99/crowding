@@ -29,7 +29,6 @@ import pl.remplewicz.crowding.util.converter.UserConverter;
  * Git-Hub Username: rempek99
  */
 
-@Api(tags = "Authentication")
 @RestController
 @RequestMapping("api/public")
 public class AuthController {

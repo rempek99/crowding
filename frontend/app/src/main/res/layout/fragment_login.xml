@@ -46,11 +46,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/dontHaveAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/do_not_have_account"
+        android:textAlignment="textStart"
+        android:textSize="15sp"
+        android:layout_marginLeft="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/loginRegisterBtn"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <Button
         android:id="@+id/loginLoginBtn"
         android:layout_width="match_parent"
         android:layout_height="80sp"
         android:text="@string/prompt_login"
+        android:background="@color/primary_variant"
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <Button
@@ -59,6 +71,7 @@
         android:layout_height="50sp"
         android:layout_marginBottom="32dp"
         android:text="@string/register"
+        android:background="@color/primary_variant"
         app:layout_constraintBottom_toTopOf="@+id/loginLoginBtn"
         app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

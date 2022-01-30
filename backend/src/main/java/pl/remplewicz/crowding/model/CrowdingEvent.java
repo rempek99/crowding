@@ -9,18 +9,12 @@ package pl.remplewicz.crowding.model;/*
  */
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -54,7 +48,6 @@ public class CrowdingEvent {
     @OneToOne
     private User organizer;
 
-    // todo defining key on userid
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<User> participants = new HashSet<>();
 

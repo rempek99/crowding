@@ -27,5 +27,4 @@ public interface CrowdingEventRepo extends JpaRepository<CrowdingEvent, Long> {
     CrowdingEvent getById(Long id);
 
     Optional<CrowdingEvent> findById(Long id);
-
 }

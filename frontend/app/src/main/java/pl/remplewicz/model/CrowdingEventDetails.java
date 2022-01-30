@@ -24,6 +24,7 @@ public class CrowdingEventDetails {
     private Integer slots;
     private Double latitude;
     private Double longitude;
+    private String locationName;
     private UserDetails organizer;
     private Set<UserDetails> participants;
     private Double distance;

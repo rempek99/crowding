@@ -36,6 +36,8 @@ public class CrowdingEvent {
 
     private Double longitude;
 
+    private String locationName;
+
     private Double distance;
 
     private Integer version;

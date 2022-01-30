@@ -46,9 +46,4 @@ public class MyController {
 
     @Autowired
     IUserService userService;
-
-    @PostMapping("public/test")
-    public UserDto test(@RequestBody String login){
-        return UserConverter.toDto(userService.test(login));
-    }
 }

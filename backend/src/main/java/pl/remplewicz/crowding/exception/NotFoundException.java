@@ -13,8 +13,6 @@ package pl.remplewicz.crowding.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.function.Supplier;
-
 public class NotFoundException extends ResponseStatusException {
 
     private static final String USERNAME_NOT_FOUND_MESSAGE = "Username: '%s' not found";
@@ -37,20 +35,4 @@ public class NotFoundException extends ResponseStatusException {
     public static NotFoundException eventNotFound(Long id) {
         return new NotFoundException(HttpStatus.NOT_FOUND, String.format(EVENT_ID_NOT_FOUND_MESSAGE, id));
     }
-//    public NotFoundException(String message) {
-//        super(message);
-//    }
-//
-//    public NotFoundException(Class<?> clazz, long id) {
-//        super(String.format("Entity %s with id %d not found", clazz.getSimpleName(), id));
-//    }
-//
-//    public NotFoundException(Class<?> clazz, String id) {
-//        super(String.format("Entity %s with id %s not found", clazz.getSimpleName(), id));
-//    }
-//
-//    public NotFoundException(Class<?> clazz, Long id) {
-//        super(String.format("Entity %s with id %s not found", clazz.getSimpleName(), id.toString()));
-//    }
-
 }

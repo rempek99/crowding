@@ -2,7 +2,6 @@ package pl.remplewicz.crowding.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.remplewicz.crowding.exception.DuplicationException;
@@ -16,9 +15,6 @@ import pl.remplewicz.crowding.repository.UserRepo;
 import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /*
  * Copyright (c) 2021.
@@ -74,14 +70,6 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User test(String login) {
-        User tester = new User(login, passwordEncoder.encode("1234"));
-        userRepo.saveAndFlush(tester);
-        tester.addAuthority(Role.ADMIN);
-        return userRepo.save(tester);
-    }
-
-    @Override
     public User setUserDetails(User caller, UserInfo userInfoFromDto) {
         caller.setUserInfo(userInfoFromDto);
         return userRepo.saveAndFlush(caller);
@@ -90,19 +78,6 @@ public class UserService implements IUserService {
     @Override
     public List<User> getAll() {
         return userRepo.findByOrderByUsernameAsc();
-    }
-
-    @Override
-    public Optional<User> getPrincipalByUsername(String username) {
-        Optional<User> user = userRepo.findByUsername(username);
-        if(user.isPresent()){
-            if(user.get().isEnabled() && (user.get().hasRole(Role.USER) || user.get().hasRole(Role.ADMIN))){
-                return user;
-            } else{
-                return Optional.empty();
-            }
-        }
-        return user;
     }
 
     @Override

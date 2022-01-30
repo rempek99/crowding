@@ -2,7 +2,6 @@ package pl.remplewicz.crowding.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 /*
@@ -22,7 +21,7 @@ public class EventException extends ResponseStatusException {
     private static final String ALREADY_SIGNED = "You are already signed in event";
     private static final String YOU_ARE_NOT_PARTICIPANT = "You are are not participant of the event";
     private static final String EVENT_TOO_EARLY = "Event must be set on at least one hour since now";
-    private static final String EVNET_ENDED = "Event has been already ended";
+    private static final String EVENT_ENDED = "Event has been already ended";
 
     public static EventNoSlotsException createNoSlotsException() {
         return new EventNoSlotsException(NO_SLOTS);
@@ -50,7 +49,7 @@ public class EventException extends ResponseStatusException {
     }
 
     public static EventEndedException createEventEnded() {
-        return new EventEndedException(EVNET_ENDED);
+        return new EventEndedException(EVENT_ENDED);
     }
 
     public static class EventEndedException extends EventException {

@@ -36,24 +36,12 @@ public class RetrofitInstance {
             });
 
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-// set your desired log level
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-// add your other interceptors …
-// add logging as last interceptor
             httpClient.addInterceptor(logging);
-
-
 
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(CrowdingConstants.BACKEND_URL)
                     .addConverterFactory(JacksonConverterFactory.create(new CustomObjectMapper()))
-//                            GsonConverterFactory
-//                            .create(new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
-//                                @Override
-//                                public LocalDateTime deserialize(JsonElement json, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-//                                    return ZonedDateTime.parse(json.getAsJsonPrimitive().getAsString()).toLocalDateTime();
-//                                }
-//                            }).create()))
                     .client(httpClient.build())
                     .build();
             api = retrofit.create(ICrowdingApi.class);

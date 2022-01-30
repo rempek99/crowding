@@ -24,9 +24,12 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
+import org.json.JSONObject;
+
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 
+import lombok.SneakyThrows;
 import pl.remplewicz.R;
 import pl.remplewicz.api.RetrofitInstance;
 import pl.remplewicz.model.CrowdingEvent;
@@ -46,6 +49,7 @@ public class CreateEventFragment extends Fragment {
     private boolean datetimePickerOpened = false;
     private int mYear, mMonth, mDay, mHour, mMinute;
     private double latitude,longitude;
+    private String locationName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,6 +87,7 @@ public class CreateEventFragment extends Fragment {
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
                 latitude = place.getLatLng().latitude;
                 longitude = place.getLatLng().longitude;
+                locationName = place.getName();
             }
 
 
@@ -141,11 +146,13 @@ public class CreateEventFragment extends Fragment {
                 .description(description.getText().toString())
                 .latitude(latitude)
                 .longitude(longitude)
+                .locationName(locationName)
                 .slots(Integer.parseInt(slots.getText().toString()))
                 .build();
 
         try {
             RetrofitInstance.getApi().createEvent(event).enqueue(new Callback<CrowdingEvent>() {
+                @SneakyThrows
                 @Override
                 public void onResponse(Call<CrowdingEvent> call, Response<CrowdingEvent> response) {
                     if (response.code() == 200) {
@@ -155,6 +162,11 @@ public class CreateEventFragment extends Fragment {
                     if (response.code() == 401) {
                         InformationBar.showInfo(getString(R.string.login_required));
                         NavigationHelper.showLoginFragment(CreateEventFragment.this);
+                    }
+                    if (response.code() == 409) {
+                        assert response.errorBody() != null;
+                        JSONObject json = new JSONObject(response.errorBody().string());
+                        InformationBar.showInfo((String) json.get("message"));
                     }
                 }
 

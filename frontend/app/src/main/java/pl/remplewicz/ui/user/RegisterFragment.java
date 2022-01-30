@@ -80,6 +80,11 @@ public class RegisterFragment extends Fragment {
         final String login, password, passwordConfirm;
         password = passwordInput.getText().toString();
         passwordConfirm = passwordConfirmInput.getText().toString();
+        if(password.length()<8){
+            passwordInput.setError(getString(R.string.password_too_short));
+            InformationBar.showInfo(getString(R.string.password_too_short));
+            return false;
+        }
         if (!password.equals(passwordConfirm)) {
             passwordConfirmInput.setError(getString(R.string.different_passwords));
             InformationBar.showInfo(getString(R.string.different_passwords));

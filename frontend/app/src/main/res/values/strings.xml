@@ -36,7 +36,8 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="prompt_login">Login</string>
-    <string name="provide_credentials">Please provide user and password</string>
+    <string name="provide_credentials">Please provide username and password</string>
+    <string name="do_not_have_account">You do not have an account?</string>
     <string name="register">register</string>
     <string name="prompt_password_confirm">Confirm Password</string>
     <string name="settings">Settings</string>
@@ -106,4 +107,6 @@
     <string name="percentage_reached">%1$s %% slots taken! Prepare to the event!</string>
     <string name="percentage_not_reached">Only %1$s%% slots taken! We have to reach at least 75%% to get the event started.</string>
     <string name="ascii_list_elem">"• %1$s"</string>
+    <string name="password_too_short">Password should consist of at least 8 characters</string>
+    <string name="users_management">Users Management</string>
 </resources>

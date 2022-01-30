@@ -30,6 +30,7 @@ public class CrowdingEventWithDistanceDto {
     private Integer slots;
     private Double latitude;
     private Double longitude;
+    private String locationName;
     private Double distance;
     private Integer version;
 }

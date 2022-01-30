@@ -37,7 +37,7 @@ public class UserController {
 
     @GetMapping("all")
     @RolesAllowed(Role.ADMIN)
-    public List<UserRolesDto> getAllUsersWithRoles(){
+    public List<UserRolesDto> getAllUsersWithRoles() {
         return UserConverter.toDtoWithRolesList(userService.getAll());
     }
 
@@ -45,10 +45,7 @@ public class UserController {
     @RolesAllowed({Role.USER, Role.ADMIN})
     public UserDetailsDto getUserDetails(@PathVariable String username) throws UserAccountException.UserNotFoundAccountException {
         User user = userService.findByUsername(username);
-        if(user.isEnabled()) {
-            return UserConverter.toDtoWithDetails(user);
-        }
-        throw UserAccountException.createUserNotFoundException();
+        return UserConverter.toDtoWithDetails(user);
     }
 
     @GetMapping("details")
@@ -78,8 +75,8 @@ public class UserController {
 
     @PutMapping("enable/{id}/{active}")
     @RolesAllowed(Role.ADMIN)
-    public UserRolesDto changeUserActive(@PathVariable Long id,@PathVariable Boolean active, Principal principal) throws UserAccountException.UserForbiddenEditException {
-        return  UserConverter.toDtoWithRoles(userService.changeUserEnabled(id,active,principal));
+    public UserRolesDto changeUserActive(@PathVariable Long id, @PathVariable Boolean active, Principal principal) throws UserAccountException.UserForbiddenEditException {
+        return UserConverter.toDtoWithRoles(userService.changeUserEnabled(id, active, principal));
     }
 
     @PutMapping("roles/activate/{id}/{role}")

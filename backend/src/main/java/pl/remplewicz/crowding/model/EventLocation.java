@@ -28,5 +28,6 @@ public class EventLocation {
     private Long id;
     private double latitude;
     private double longitude;
+    private String name;
 
 }

@@ -45,23 +45,9 @@ public class UsersListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        requireActivity().setTitle(getString(R.string.users_management));
         usersTable = view.findViewById(R.id.users_list_table);
         fetch();
-//        TableRow tr = new TableRow(getContext());
-//        TextView username = new TextView(getContext());
-//        username.setText("tester");
-//        Button activeBtn = new Button(getContext());
-//        activeBtn.setText("✘");
-//        Button userBtn = new Button(getContext());
-//        userBtn.setText("✘");
-//        Button adminBtn = new Button(getContext());
-//        adminBtn.setText("✔");
-//        tr.addView(username);
-//        tr.addView(activeBtn);
-//        tr.addView(userBtn);
-//        tr.addView(adminBtn);
-//        usersTable.addView(tr);
     }
 
     private void fetch() {

@@ -28,6 +28,7 @@ public class CrowdingEventDetailsDto {
     private Integer slots;
     private Double latitude;
     private Double longitude;
+    private String locationName;
     private UserDetailsDto organizer;
     private Set<UserDetailsDto> participants;
     private Integer version;

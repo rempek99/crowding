@@ -35,6 +35,7 @@ public class CrowdingEventConverter {
                 .participants(crowdingEvent.getParticipants().size())
                 .longitude(crowdingEvent.getLocation().getLongitude())
                 .latitude(crowdingEvent.getLocation().getLatitude())
+                .locationName(crowdingEvent.getLocation().getName())
                 .version(crowdingEvent.getVersion())
                 .build();
     }
@@ -47,7 +48,7 @@ public class CrowdingEventConverter {
 
     public static CrowdingEvent createEntityFromDto(CrowdingEventDto eventDto) {
         return new CrowdingEvent(null, eventDto.getEventDate(), eventDto.getTitle(), eventDto.getDescription(),
-                eventDto.getSlots(), new EventLocation(null, eventDto.getLatitude(), eventDto.getLongitude()),
+                eventDto.getSlots(), new EventLocation(null, eventDto.getLatitude(), eventDto.getLongitude(), eventDto.getLocationName()),
                 null, Collections.emptySet(),eventDto.getVersion());
     }
 
@@ -61,6 +62,7 @@ public class CrowdingEventConverter {
                 .participants(UserConverter.toSetDtoWithDetails(crowdingEvent.getParticipants()))
                 .latitude(crowdingEvent.getLocation().getLatitude())
                 .longitude(crowdingEvent.getLocation().getLongitude())
+                .locationName(crowdingEvent.getLocation().getName())
                 .organizer(UserConverter.toDtoWithDetails(crowdingEvent.getOrganizer()))
                 .version(crowdingEvent.getVersion())
                 .build();
@@ -78,6 +80,7 @@ public class CrowdingEventConverter {
                 .participants(crowdingEvent.getParticipants().size())
                 .longitude(crowdingEvent.getLocation().getLongitude())
                 .latitude(crowdingEvent.getLocation().getLatitude())
+                .locationName(crowdingEvent.getLocation().getName())
                 .distance(eventDistance.getDistance())
                 .version(crowdingEvent.getVersion())
                 .build();
@@ -93,6 +96,7 @@ public class CrowdingEventConverter {
                 .participants(event.getParticipants().size())
                 .longitude(event.getLocation().getLongitude())
                 .latitude(event.getLocation().getLatitude())
+                .locationName(event.getLocation().getName())
                 .distance(null)
                 .version(event.getVersion())
                 .build();

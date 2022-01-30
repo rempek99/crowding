@@ -48,7 +48,7 @@ public class EventController {
     @GetMapping("api/public/events/nearest/{latitude}/{longitude}")
     public List<CrowdingEventWithDistanceDto> getNearEvents(@PathVariable Double latitude,
                                                             @PathVariable Double longitude) {
-        EventLocation location = new EventLocation(null, latitude, longitude);
+        EventLocation location = new EventLocation(null, latitude, longitude,null);
         return CrowdingEventConverter.toDtoWithDistanceList(eventService.getAllNear(location));
     }
 
@@ -56,7 +56,7 @@ public class EventController {
     @GetMapping("api/events/myevents/{latitude}/{longitude}")
     public List<CrowdingEventWithDistanceDto> getMyNearEvents(@PathVariable Double latitude,
                                                               @PathVariable Double longitude, Principal principal) {
-        EventLocation location = new EventLocation(null, latitude, longitude);
+        EventLocation location = new EventLocation(null, latitude, longitude,null);
         return CrowdingEventConverter.toDtoWithDistanceList(eventService.getAllNearUserEvents(location, principal));
 
     }

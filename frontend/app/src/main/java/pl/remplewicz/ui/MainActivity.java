@@ -103,15 +103,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuItem logout = menu.findItem(R.id.navigation_logout);
         MenuItem login = menu.findItem(R.id.navigation_login_fragment);
         MenuItem usersList = menu.findItem(R.id.navigation_users_list);
+        MenuItem myEvents = menu.findItem(R.id.navigation_my_events_framgent);
+        MenuItem addEvent = menu.findItem(R.id.navigation_create_event_fragment);
         usersList.setVisible(false);
         if (AuthTokenStore.getInstance().getToken() == null) {
             logout.setEnabled(false);
             // todo Login button is not visible
             login.setEnabled(true);
+            myEvents.setEnabled(false);
+            addEvent.setEnabled(false);
             navbar_username.setText(R.string.not_logged_in);
         } else {
             logout.setEnabled(true);
             login.setEnabled(false);
+            myEvents.setEnabled(true);
+            addEvent.setEnabled(true);
             String username = AuthTokenStore.getInstance().getUsername();
             if (username != null) {
                 if(AuthTokenStore.getInstance().isAdmin()){
@@ -128,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        boolean userLoggedIn = AuthTokenStore.getInstance().getToken() == null;
         switch (item.getItemId()) {
             case R.id.navigation_home:
                 NavigationHelper.backToHomeFragment();
@@ -136,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 NavigationHelper.goTo(new LoginFragment(),getString(R.string.login_fragment_tag));
                 break;
             case R.id.navigation_create_event_fragment:
-                if (AuthTokenStore.getInstance().getToken() == null) {
+                if (userLoggedIn) {
                     InformationBar.showInfo(getString(R.string.login_required));
                     return true;
                 }
@@ -151,14 +158,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 NavigationHelper.backToHomeFragment();
                 break;
             case R.id.navigation_my_events_framgent:
-                if (AuthTokenStore.getInstance().getToken() == null) {
+                if (userLoggedIn) {
                     InformationBar.showInfo(getString(R.string.login_required));
                     return true;
                 }
                 NavigationHelper.goTo(new MyEventsFragment(),getString(R.string.my_events_fragment_tag));
                 break;
             case R.id.navigation_users_list:
-                if (AuthTokenStore.getInstance().getToken() == null) {
+                if (userLoggedIn) {
                     InformationBar.showInfo(getString(R.string.login_required));
                     return true;
                 }

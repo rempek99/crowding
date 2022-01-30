@@ -34,7 +34,7 @@
 
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:labelFor="@id/event_details_date"
                 android:text="@string/title_date"
@@ -49,7 +49,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:labelFor="@id/event_details_organizer"
                 android:text="@string/title_organizer"
@@ -74,7 +74,7 @@
 
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:labelFor="@id/event_details_participants_layout"
                 android:text="@string/title_participants"
@@ -84,7 +84,7 @@
 
             <LinearLayout
                 android:id="@+id/event_details_participants_layout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginStart="15dp">
@@ -98,7 +98,7 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:labelFor="@id/event_details_slots"
                 android:text="@string/title_slots"
@@ -113,7 +113,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:labelFor="@id/event_details_location"
                 android:text="@string/title_location"
@@ -128,7 +128,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:labelFor="@id/event_details_description"
                 android:text="@string/title_description"
@@ -146,6 +146,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
+                android:background="@color/primary_variant"
                 android:text="@string/show_on_map"/>
 
         </LinearLayout>
@@ -156,6 +157,7 @@
             android:layout_height="wrap_content"
             android:text="@string/action_sign_in_short"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/primary_variant"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -177,7 +177,7 @@ public class EventDetailsFragment extends Fragment {
             NavigationHelper.goTo(new UserProfileFragment(eventDetails.getOrganizer()), getString(R.string.user_profile_fragment_tag));
         });
         slots.setText(String.format(getString(R.string.numberOfNumberPattern), eventDetails.getParticipants().size(), eventDetails.getSlots()));
-        location.setText(PrettyStringFormatter.prettyLocation(eventDetails.getLatitude(), eventDetails.getLongitude()));
+        location.setText(eventDetails.getLocationName() + " " + PrettyStringFormatter.prettyLocation(eventDetails.getLatitude(), eventDetails.getLongitude()));
         description.setText(eventDetails.getDescription());
         double percentage = eventDetails.getParticipants().size();
         percentage = percentage / eventDetails.getSlots() * 100.0;

@@ -38,6 +38,6 @@
     <item
         android:id="@+id/navigation_users_list"
         android:icon="@drawable/ic_baseline_people_24"
-        android:title="@string/users"/>
+        android:title="@string/users_management"/>
 
 </menu>

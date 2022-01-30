@@ -10,7 +10,6 @@ package pl.remplewicz.crowding.service;/*
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import pl.remplewicz.crowding.exception.DuplicationException;
 import pl.remplewicz.crowding.exception.EventException;
@@ -52,6 +51,9 @@ public class EventService implements IEventService {
                 userRepo.findByUsername(creator.getName()).orElseThrow(
                         () -> NotFoundException.createUsernameNotFound(creator.getName())
                 );
+        if(!user.isEnabled()){
+            throw NotFoundException.createUsernameNotFound(user.getUsername());
+        }
         if (event.getEventDate().isBefore(ZonedDateTime.now().plus(1, ChronoUnit.HOURS))) {
             throw EventException.createEventTooEarlyException();
         }
@@ -75,7 +77,6 @@ public class EventService implements IEventService {
                         () -> NotFoundException.createUsernameNotFound(participant.getName())
                 );
         CrowdingEvent event = eventRepository.getById(id);
-//            CrowdingEvent event = eventRepository.findById(id).orElseThrow(() -> NotFoundException.eventNotFound(id));
         if (event.getParticipants().contains(user)) {
             throw EventException.createAlreadySigned();
         }
