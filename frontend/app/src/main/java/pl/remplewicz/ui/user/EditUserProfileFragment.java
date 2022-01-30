@@ -109,8 +109,6 @@ public class EditUserProfileFragment extends Fragment {
                 if(response.code() == 200) {
                     InformationBar.showInfo(getString(R.string.edited));
                     NavigationHelper.previousFragment();
-                    //todo check it
-//                    NavigationHelper.goTo(parentFragment,getString(R.string.user_profile_fragment_tag));
                 } else {
                     try {
                         assert response.errorBody() != null;

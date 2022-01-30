@@ -41,7 +41,6 @@ public class Role implements GrantedAuthority {
     private User user;
 
 
-    // todo validate what is persisting to db
     @Column(columnDefinition = "varchar(128)")
     @EnumValidator(acceptedValues = {Role.ADMIN, Role.USER}, message = "Invalid dataType")
     private String authority;

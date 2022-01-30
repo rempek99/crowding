@@ -90,7 +90,6 @@ public class LoginFragment extends Fragment {
                     InformationBar.showInfo(getResources().getString(R.string.login_successed));
                     if(fallbackFragment!=null){
                         NavigationHelper.previousFragment();
-                        //todo checkit
                         NavigationHelper.goTo(fallbackFragment,"");
                     } else {
                         NavigationHelper.backToHomeFragment();

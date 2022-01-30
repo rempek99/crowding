@@ -83,7 +83,6 @@ public class CreateEventFragment extends Fragment {
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
-                // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
                 latitude = place.getLatLng().latitude;
                 longitude = place.getLatLng().longitude;
@@ -93,7 +92,6 @@ public class CreateEventFragment extends Fragment {
 
             @Override
             public void onError(@NonNull Status status) {
-                // TODO: Handle the error.
                 Log.i(TAG, "An error occurred: " + status);
             }
         });

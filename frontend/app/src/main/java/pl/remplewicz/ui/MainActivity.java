@@ -108,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         usersList.setVisible(false);
         if (AuthTokenStore.getInstance().getToken() == null) {
             logout.setEnabled(false);
-            // todo Login button is not visible
             login.setEnabled(true);
             myEvents.setEnabled(false);
             addEvent.setEnabled(false);

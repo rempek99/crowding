@@ -29,7 +29,6 @@ public class CrowdingApi {
             Response response = call.execute();
             return response.body();
         } catch (IOException ex){
-            //todo implement it
             return null;
         }
     }

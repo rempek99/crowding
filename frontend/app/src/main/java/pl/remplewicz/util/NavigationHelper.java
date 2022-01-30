@@ -29,14 +29,12 @@ public class NavigationHelper {
 
     public static void goTo(Fragment fragment,String tag) {
 
-        //todo check if given fragment is visible
         mainActivity.getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment, tag)
                 .setReorderingAllowed(true)
                 .addToBackStack(tag)
                 .commit();
-//        mainActivity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, fragment.getTag()).commit();
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+      if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         }
     }
